@@ -3,6 +3,7 @@ import { Pressable, View, Text, TextInput, StyleSheet } from "react-native";
 import TextInputContainer from "./TextInputContainer";
 import { AddExpenseCategory } from "./AddExpenseCategory";
 import { Category } from "../util/types";
+import { mainColor } from "../util/colors";
 
 interface AddExpenseProps {
   onPressAddExpense: (textInput: string, selectedCategoryId: number) => void;
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   pressable: {
-    backgroundColor: "#465aa6",
+    backgroundColor: mainColor,
     margin: 50,
     borderRadius: 15,
     padding: 10,

@@ -15,10 +15,10 @@ export const CustomModal = ({
   return (
     <Modal animationType="slide" visible={showModal}>
       <View style={styles.modal}>
-        <Text style={styles.modalText}>
-          {expense.expenseAmount.toFixed(2)}€ Spent
+        <Text style={styles.text}>
+          {expense.expenseAmount.toFixed(2)}€ spent on
         </Text>
-        <Text>{expense.expenseType.categoryName}</Text>
+        <Text style={styles.text}>{expense.expenseType.categoryName}</Text>
       </View>
       <View style={styles.pressableContainer}>
         <Pressable onPress={closeModal}>
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
-  modalText: {
+  text: {
     fontSize: 25,
   },
   pressableContainer: {

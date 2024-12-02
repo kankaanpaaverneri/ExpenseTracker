@@ -1,12 +1,6 @@
-import {
-  FlatList,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Pressable, StyleSheet, Text } from "react-native";
 import { Category } from "../util/types";
+import { mainColor } from "../util/colors";
 
 interface AddExpenseCategoryProps {
   categories: Category[];
@@ -46,7 +40,7 @@ const styles = StyleSheet.create({
 
   selectedPressable: {
     padding: 10,
-    backgroundColor: "#465aa6",
+    backgroundColor: mainColor,
     color: "white",
   },
 });

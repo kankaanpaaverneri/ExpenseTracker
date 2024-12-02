@@ -27,7 +27,7 @@ export const Home = () => {
       categoryId: 1,
     },
     {
-      categoryName: "Impulse Buy",
+      categoryName: "Impulse",
       categoryId: 2,
     },
   ]);
@@ -70,6 +70,17 @@ export const Home = () => {
     setShowModal(false);
   }
 
+  function addNewCategory(categoryName: string): void {
+    console.log("New category added: ", categoryName);
+    setCategories((prev) => {
+      prev.push({
+        categoryName: categoryName,
+        categoryId: prev.length + 1,
+      });
+      return prev;
+    });
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -78,7 +89,7 @@ export const Home = () => {
           expense={expense}
           closeModal={closeModal}
         />
-        <Text style={styles.titleText}>Expense Tracker</Text>
+        <Text style={styles.title}>Expense Tracker</Text>
         <AddExpense
           feedback={feedback}
           onPressAddExpense={onPressAddExpense}
@@ -87,7 +98,7 @@ export const Home = () => {
         <View style={styles.navigationContainer}>
           <Pressable
             style={styles.navigationItem}
-            onPress={() => navigation.navigate("Categories")}
+            onPress={() => navigation.navigate("Categories", { categories })}
           >
             <Text>Add category</Text>
           </Pressable>
@@ -101,7 +112,7 @@ export const Home = () => {
             style={styles.navigationItem}
             onPress={() => navigation.navigate("Account")}
           >
-            <Text>Expenses</Text>
+            <Text>Account</Text>
           </Pressable>
         </View>
       </View>
@@ -110,7 +121,7 @@ export const Home = () => {
 };
 
 const styles = StyleSheet.create({
-  titleText: {
+  title: {
     fontSize: 25,
   },
   container: {
