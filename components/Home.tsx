@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Keyboard,
   Pressable,
@@ -6,6 +6,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
+  ActivityIndicator,
 } from "react-native";
 import AddExpense from "./AddExpense";
 import { parseExpense } from "../util/parseExpense";
@@ -14,29 +15,59 @@ import { CustomModal } from "./CustomModal";
 import { findCategory } from "../util/findCategory";
 import { useNavigation } from "@react-navigation/native";
 import { ProfileScreenNavigationProp } from "../App";
+import { fetchGet } from "../http/http";
+import { getCategoriesUrl } from "../http/url";
+import { mainColor } from "../util/colors";
+import { Error } from "./Error";
+import { useAppSelector, useAppDispatch } from "../hooks/hooks";
+import { updateCategories } from "../slice/categoriesSlice";
+import { modalAction } from "../slice/modalSlice";
+import { CustomPressable } from "./CustomPressable";
 
 export const Home = () => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
-  const [categories, setCategories] = useState<Category[]>([
-    {
-      categoryName: "No category",
-      categoryId: 0,
-    },
-    {
-      categoryName: "Groceries",
-      categoryId: 1,
-    },
-    {
-      categoryName: "Impulse",
-      categoryId: 2,
-    },
-  ]);
+  const dispatch = useAppDispatch();
+  const categories = useAppSelector(
+    (state) => state.categoriesReducer.categories,
+  );
+  const showModal = useAppSelector((state) => state.modalReducer.showModal);
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  async function getCategories() {
+    setLoading(true);
+    try {
+      const { categories } = await fetchGet(getCategoriesUrl);
+      if (!categories) {
+        setError("Error fetching data from server.");
+        setLoading(false);
+        return;
+      }
+
+      dispatch(updateCategories(categories));
+      setLoading(false);
+    } catch (error) {
+      setError("Error fetching data from server");
+    }
+  }
+
+  useEffect(() => {
+    if (!showModal) getCategories();
+  }, [showModal]);
+
+  async function onPressTryAgain() {
+    setError("");
+    await getCategories();
+  }
+
   const [expense, setExpense] = useState<Expense>({
     expenseAmount: 0,
-    expenseType: categories[0],
+    expenseType: {
+      categoryName: "",
+      categoryId: 0,
+    },
   });
   const [feedback, setFeedback] = useState<string>("");
-  const [showModal, setShowModal] = useState<boolean>(false);
 
   function onPressAddExpense(
     textInput: string,
@@ -62,43 +93,44 @@ export const Home = () => {
         expenseType: category,
       };
     });
-    setShowModal(true);
+    dispatch(modalAction(true));
     //Send to backend
   }
 
-  function closeModal(): void {
-    setShowModal(false);
-  }
-
-  function addNewCategory(categoryName: string): void {
-    console.log("New category added: ", categoryName);
-    setCategories((prev) => {
-      prev.push({
-        categoryName: categoryName,
-        categoryId: prev.length + 1,
-      });
-      return prev;
-    });
+  function closeModal() {
+    dispatch(modalAction(false));
   }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <CustomModal
-          showModal={showModal}
-          expense={expense}
-          closeModal={closeModal}
-        />
+        <CustomModal>
+          <Text style={styles.text}>
+            {expense.expenseAmount.toFixed(2)}€ spent on
+          </Text>
+          <Text style={styles.text}>{expense.expenseType.categoryName}</Text>
+          <CustomPressable onPress={closeModal} />
+        </CustomModal>
         <Text style={styles.title}>Expense Tracker</Text>
-        <AddExpense
-          feedback={feedback}
-          onPressAddExpense={onPressAddExpense}
-          categories={categories}
-        />
+        {loading && (
+          <ActivityIndicator
+            style={styles.activityIndicator}
+            size={"large"}
+            color={mainColor}
+          />
+        )}
+        {error && <Error error={error} onPressTryAgain={onPressTryAgain} />}
+        {categories.length > 0 && (
+          <AddExpense
+            feedback={feedback}
+            onPressAddExpense={onPressAddExpense}
+            categories={categories}
+          />
+        )}
         <View style={styles.navigationContainer}>
           <Pressable
             style={styles.navigationItem}
-            onPress={() => navigation.navigate("Categories", { categories })}
+            onPress={() => navigation.navigate("Categories")}
           >
             <Text>Add category</Text>
           </Pressable>
@@ -124,6 +156,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
   },
+  text: {
+    fontSize: 25,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -131,9 +166,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   navigationContainer: {
+    verticalAlign: "bottom",
     flexDirection: "row",
   },
   navigationItem: {
     margin: 20,
+  },
+  activityIndicator: {
+    margin: 10,
   },
 });

@@ -1,30 +1,18 @@
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import { Expense } from "../util/types";
+import React from "react";
+import { useAppSelector, useAppDispatch } from "../hooks/hooks";
+import { modalAction } from "../slice/modalSlice";
 
 interface CustomModalProps {
-  showModal: boolean;
-  expense: Expense;
-  closeModal: () => void;
+  children: React.ReactNode;
 }
 
-export const CustomModal = ({
-  showModal,
-  expense,
-  closeModal,
-}: CustomModalProps) => {
+export const CustomModal = ({ children }: CustomModalProps) => {
+  const showModal = useAppSelector((state) => state.modalReducer.showModal);
+
   return (
     <Modal animationType="slide" visible={showModal}>
-      <View style={styles.modal}>
-        <Text style={styles.text}>
-          {expense.expenseAmount.toFixed(2)}€ spent on
-        </Text>
-        <Text style={styles.text}>{expense.expenseType.categoryName}</Text>
-      </View>
-      <View style={styles.pressableContainer}>
-        <Pressable onPress={closeModal}>
-          <Text style={styles.pressableText}>Ok</Text>
-        </Pressable>
-      </View>
+      <View style={styles.modal}>{children}</View>
     </Modal>
   );
 };
@@ -35,24 +23,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-  },
-  text: {
-    fontSize: 25,
-  },
-  pressableContainer: {
-    flex: 1,
-  },
-
-  pressableText: {
-    fontSize: 20,
-    justifyContent: "center",
-    alignSelf: "center",
-    backgroundColor: "#465aa6",
-    color: "white",
-    borderRadius: 10,
-    paddingLeft: 70,
-    paddingRight: 70,
-    paddingTop: 10,
-    paddingBottom: 10,
   },
 });

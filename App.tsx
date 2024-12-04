@@ -4,6 +4,8 @@ import { Home } from "./components/Home";
 import { Categories } from "./components/Categories";
 import { Expenses } from "./components/Expenses";
 import { Account } from "./components/Account";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Category } from "./util/types";
@@ -21,7 +23,7 @@ export type ProfileScreenRouteProp = RouteProp<
 
 type RootStackParamList = {
   Home: undefined;
-  Categories: { categories: Category[] };
+  Categories: undefined;
   Expenses: undefined;
   Account: undefined;
 };
@@ -32,11 +34,7 @@ function RootStack() {
   return (
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen
-        name="Categories"
-        component={Categories}
-        initialParams={{ categories: [] }}
-      />
+      <Stack.Screen name="Categories" component={Categories} />
       <Stack.Screen name="Expenses" component={Expenses} />
       <Stack.Screen name="Account" component={Account} />
     </Stack.Navigator>
@@ -45,8 +43,10 @@ function RootStack() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <RootStack />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <RootStack />
+      </NavigationContainer>
+    </Provider>
   );
 }
