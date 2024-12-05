@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import {
   Keyboard,
-  Pressable,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
@@ -10,11 +9,9 @@ import {
 } from "react-native";
 import AddExpense from "./AddExpense";
 import { parseExpense } from "../util/parseExpense";
-import { Expense, Category } from "../util/types";
+import { Expense } from "../util/types";
 import { CustomModal } from "./CustomModal";
 import { findCategory } from "../util/findCategory";
-import { useNavigation } from "@react-navigation/native";
-import { ProfileScreenNavigationProp } from "../App";
 import { fetchGet } from "../http/http";
 import { getCategoriesUrl } from "../http/url";
 import { mainColor } from "../util/colors";
@@ -23,14 +20,15 @@ import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 import { updateCategories } from "../slice/categoriesSlice";
 import { modalAction } from "../slice/modalSlice";
 import { CustomPressable } from "./CustomPressable";
+import { Navigation } from "./Navigation";
+import { updateData } from "../slice/updateSlice";
 
 export const Home = () => {
-  const navigation = useNavigation<ProfileScreenNavigationProp>();
   const dispatch = useAppDispatch();
   const categories = useAppSelector(
     (state) => state.categoriesReducer.categories,
   );
-  const showModal = useAppSelector((state) => state.modalReducer.showModal);
+  const update = useAppSelector((state) => state.updateReducer.update);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -43,21 +41,21 @@ export const Home = () => {
         setLoading(false);
         return;
       }
-
       dispatch(updateCategories(categories));
       setLoading(false);
+      dispatch(updateData(false));
     } catch (error) {
       setError("Error fetching data from server");
     }
   }
 
   useEffect(() => {
-    if (!showModal) getCategories();
-  }, [showModal]);
+    if (update) getCategories();
+  }, [update]);
 
   async function onPressTryAgain() {
     setError("");
-    await getCategories();
+    dispatch(updateData(true));
   }
 
   const [expense, setExpense] = useState<Expense>({
@@ -73,6 +71,16 @@ export const Home = () => {
     textInput: string,
     selectedCategoryId: number,
   ): void {
+    if (textInput.length === 0) {
+      setFeedback("Enter an expense");
+      return;
+    }
+
+    if (selectedCategoryId === 0) {
+      setFeedback("Select a category");
+      return;
+    }
+
     // Parse textInput
     const parsedExpense: number = parseExpense(textInput);
 
@@ -94,7 +102,6 @@ export const Home = () => {
       };
     });
     dispatch(modalAction(true));
-    //Send to backend
   }
 
   function closeModal() {
@@ -124,29 +131,9 @@ export const Home = () => {
           <AddExpense
             feedback={feedback}
             onPressAddExpense={onPressAddExpense}
-            categories={categories}
           />
         )}
-        <View style={styles.navigationContainer}>
-          <Pressable
-            style={styles.navigationItem}
-            onPress={() => navigation.navigate("Categories")}
-          >
-            <Text>Add category</Text>
-          </Pressable>
-          <Pressable
-            style={styles.navigationItem}
-            onPress={() => navigation.navigate("Expenses")}
-          >
-            <Text>Expenses</Text>
-          </Pressable>
-          <Pressable
-            style={styles.navigationItem}
-            onPress={() => navigation.navigate("Account")}
-          >
-            <Text>Account</Text>
-          </Pressable>
-        </View>
+        <Navigation />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -164,13 +151,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-  },
-  navigationContainer: {
-    verticalAlign: "bottom",
-    flexDirection: "row",
-  },
-  navigationItem: {
-    margin: 20,
   },
   activityIndicator: {
     margin: 10,

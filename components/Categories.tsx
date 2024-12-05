@@ -7,14 +7,15 @@ import {
   View,
 } from "react-native";
 import { errorColor, mainColor } from "../util/colors";
-import { fetchPost } from "../http/http";
-import { addNewCategoryUrl } from "../http/url";
+import { fetchDelete, fetchPost } from "../http/http";
+import { addNewCategoryUrl, removeCategoryUrl } from "../http/url";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { modalAction } from "../slice/modalSlice";
 import { CustomModal } from "./CustomModal";
 import { CustomPressable } from "./CustomPressable";
 import { useState } from "react";
 import { isCategoryNameValid } from "../util/isCategoryNameValid";
+import { updateData } from "../slice/updateSlice";
 
 export const Categories = () => {
   const categories = useAppSelector(
@@ -33,9 +34,30 @@ export const Categories = () => {
       setInvalidCategory("Category name not valid");
       return;
     }
+    let categoryIsUsed = false;
+    categories.forEach((category) => {
+      if (category.categoryName === categoryName) {
+        categoryIsUsed = true;
+        return;
+      }
+    });
+
+    if (categoryIsUsed) {
+      setInvalidCategory("Category name is used");
+      return;
+    }
+
     setInvalidCategory("");
+    setCategoryName("");
     await fetchPost(addNewCategoryUrl, { categoryName: categoryName });
     dispatch(modalAction(false));
+    dispatch(updateData(true));
+  }
+
+  async function removeCategory(categoryId: number) {
+    if (categoryId === 0) return;
+    await fetchDelete(`${removeCategoryUrl}/${categoryId}`);
+    dispatch(updateData(true));
   }
 
   return (
@@ -51,14 +73,21 @@ export const Categories = () => {
           renderItem={({ item }) => {
             return (
               <View style={styles.categoryItem}>
-                <Text style={styles.categoryText}>{item.categoryName}</Text>
+                <View style={styles.categoryNameContainer}>
+                  <Text style={styles.categoryText}>{item.categoryName}</Text>
+                </View>
+                <View style={styles.removePressableContainer}>
+                  <Pressable onPress={() => removeCategory(item.categoryId)}>
+                    <Text>❌</Text>
+                  </Pressable>
+                </View>
               </View>
             );
           }}
           keyExtractor={(item) => item.categoryId.toString()}
         />
       </View>
-      <View>
+      <View style={{ margin: 50 }}>
         <Pressable onPress={openModal}>
           <Text>Add new Category</Text>
         </Pressable>
@@ -72,6 +101,7 @@ export const Categories = () => {
             setCategoryName(e);
           }}
           value={categoryName}
+          maxLength={20}
         />
         {invalidCategory.length > 0 && (
           <Text style={{ color: errorColor }}>{invalidCategory}</Text>
@@ -103,14 +133,23 @@ const styles = StyleSheet.create({
   },
 
   categoryItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     margin: 5,
     backgroundColor: mainColor,
     borderRadius: 15,
+    padding: 20,
+  },
+
+  categoryNameContainer: {
+    margin: 10,
+  },
+  removePressableContainer: {
+    margin: 10,
   },
 
   categoryText: {
-    textAlign: "center",
     color: "white",
-    padding: 20,
   },
 });

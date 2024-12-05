@@ -1,4 +1,4 @@
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Modal, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 import { modalAction } from "../slice/modalSlice";

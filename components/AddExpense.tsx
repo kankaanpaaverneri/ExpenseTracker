@@ -1,21 +1,15 @@
 import { useState } from "react";
-import { Pressable, View, Text, TextInput, StyleSheet } from "react-native";
+import { Pressable, View, Text, StyleSheet } from "react-native";
 import TextInputContainer from "./TextInputContainer";
 import { AddExpenseCategory } from "./AddExpenseCategory";
-import { Category } from "../util/types";
 import { mainColor } from "../util/colors";
 
 interface AddExpenseProps {
   onPressAddExpense: (textInput: string, selectedCategoryId: number) => void;
   feedback: string;
-  categories: Category[];
 }
 
-const AddExpense = ({
-  onPressAddExpense,
-  feedback,
-  categories,
-}: AddExpenseProps) => {
+const AddExpense = ({ onPressAddExpense, feedback }: AddExpenseProps) => {
   const [textInput, setTextInput] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
 
@@ -28,14 +22,16 @@ const AddExpense = ({
       <View style={styles.inputContainer}>
         <TextInputContainer textInput={textInput} setTextInput={setTextInput} />
         <AddExpenseCategory
-          categories={categories}
           onSelectCategory={onSelectCategory}
           selectedCategory={selectedCategory}
         />
       </View>
       <View style={styles.pressableContainer}>
         <Pressable
-          onPress={() => onPressAddExpense(textInput, selectedCategory)}
+          onPress={() => {
+            onPressAddExpense(textInput, selectedCategory);
+            onSelectCategory(0);
+          }}
           style={styles.pressable}
         >
           <Text style={styles.pressableText}>Add Expense</Text>

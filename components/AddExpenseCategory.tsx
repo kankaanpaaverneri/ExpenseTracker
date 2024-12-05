@@ -1,20 +1,23 @@
-import { FlatList, Pressable, StyleSheet, Text } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { Category } from "../util/types";
 import { mainColor } from "../util/colors";
+import { useAppSelector } from "../hooks/hooks";
 
 interface AddExpenseCategoryProps {
-  categories: Category[];
   onSelectCategory: (categoryId: number) => void;
   selectedCategory: number;
 }
 
 export const AddExpenseCategory = ({
-  categories,
   onSelectCategory,
   selectedCategory,
 }: AddExpenseCategoryProps) => {
+  const categories: Category[] = useAppSelector(
+    (state) => state.categoriesReducer.categories,
+  );
   return (
     <FlatList
+      style={styles.list}
       data={categories}
       renderItem={({ item }) => (
         <Pressable onPress={() => onSelectCategory(item.categoryId)}>
@@ -42,5 +45,9 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: mainColor,
     color: "white",
+  },
+  list: {
+    flexDirection: "column",
+    height: 200,
   },
 });

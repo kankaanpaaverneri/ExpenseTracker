@@ -13,3 +13,9 @@ export async function fetchPost(url: string, data: Object) {
     body: JSON.stringify(data),
   });
 }
+
+export async function fetchDelete(url: string) {
+  await fetch(url, {
+    method: "DELETE",
+  });
+}
