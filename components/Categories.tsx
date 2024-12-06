@@ -56,8 +56,13 @@ export const Categories = () => {
 
   async function removeCategory(categoryId: number) {
     if (categoryId === 0) return;
-    await fetchDelete(`${removeCategoryUrl}/${categoryId}`);
-    dispatch(updateData(true));
+    console.log(`${removeCategoryUrl}${categoryId}`);
+    try {
+      await fetchDelete(`${removeCategoryUrl}${categoryId}`);
+      dispatch(updateData(true));
+    } catch (error) {
+      console.log("Something went wrong: ", error);
+    }
   }
 
   return (
@@ -78,7 +83,7 @@ export const Categories = () => {
                 </View>
                 <View style={styles.removePressableContainer}>
                   <Pressable onPress={() => removeCategory(item.categoryId)}>
-                    <Text>❌</Text>
+                    <Text style={styles.categoryText}>Delete</Text>
                   </Pressable>
                 </View>
               </View>
@@ -121,6 +126,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
+    fontWeight: "bold",
   },
 
   textInput: {
@@ -146,6 +152,9 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   removePressableContainer: {
+    backgroundColor: "red",
+    padding: 10,
+    borderRadius: 5,
     margin: 10,
   },
 

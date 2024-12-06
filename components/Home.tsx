@@ -12,8 +12,8 @@ import { parseExpense } from "../util/parseExpense";
 import { Expense } from "../util/types";
 import { CustomModal } from "./CustomModal";
 import { findCategory } from "../util/findCategory";
-import { fetchGet } from "../http/http";
-import { getCategoriesUrl } from "../http/url";
+import { fetchGet, fetchPost } from "../http/http";
+import { addExpenseUrl, getCategoriesUrl } from "../http/url";
 import { mainColor } from "../util/colors";
 import { Error } from "./Error";
 import { useAppSelector, useAppDispatch } from "../hooks/hooks";
@@ -22,6 +22,8 @@ import { modalAction } from "../slice/modalSlice";
 import { CustomPressable } from "./CustomPressable";
 import { Navigation } from "./Navigation";
 import { updateData } from "../slice/updateSlice";
+import { getExpensesUrl } from "../http/url";
+import { updateExpenses } from "../slice/expensesSlice";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
@@ -43,14 +45,36 @@ export const Home = () => {
       }
       dispatch(updateCategories(categories));
       setLoading(false);
-      dispatch(updateData(false));
     } catch (error) {
       setError("Error fetching data from server");
     }
   }
 
+  async function getExpenses() {
+    const { expenses } = await fetchGet(getExpensesUrl);
+    if (!expenses) {
+      return;
+    }
+
+    const expensesArray: Expense[] = expenses.map((expense: any) => {
+      return {
+        expenseAmount: expense?.expenseAmount,
+        expenseType: {
+          categoryName: expense?.categoryName,
+          categoryId: expense?.categoryId,
+        },
+      };
+    });
+
+    dispatch(updateExpenses(expensesArray));
+  }
+
   useEffect(() => {
-    if (update) getCategories();
+    if (update) {
+      getCategories();
+      getExpenses();
+      dispatch(updateData(false));
+    }
   }, [update]);
 
   async function onPressTryAgain() {
@@ -67,10 +91,7 @@ export const Home = () => {
   });
   const [feedback, setFeedback] = useState<string>("");
 
-  function onPressAddExpense(
-    textInput: string,
-    selectedCategoryId: number,
-  ): void {
+  function onPressAddExpense(textInput: string, selectedCategoryId: number) {
     if (textInput.length === 0) {
       setFeedback("Enter an expense");
       return;
@@ -104,7 +125,18 @@ export const Home = () => {
     dispatch(modalAction(true));
   }
 
-  function closeModal() {
+  async function closeModal() {
+    await fetchPost(addExpenseUrl, expense);
+    setExpense(() => {
+      return {
+        expenseAmount: 0,
+        expenseType: {
+          categoryName: "",
+          categoryId: 0,
+        },
+      };
+    });
+    dispatch(updateData(true));
     dispatch(modalAction(false));
   }
 
