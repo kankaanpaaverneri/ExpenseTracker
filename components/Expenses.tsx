@@ -22,6 +22,14 @@ export const Expenses = () => {
                 <Text style={styles.expenseCategory}>
                   {item.expenseType.categoryName}
                 </Text>
+                <View style={styles.expenseDate}>
+                  <Text>
+                    {item.date.year}.{item.date.month}.{item.date.day}
+                  </Text>
+                  <Text>
+                    {item.date.hours}:{item.date.minutes}:{item.date.seconds}
+                  </Text>
+                </View>
               </View>
             );
           }}
@@ -59,5 +67,10 @@ const styles = StyleSheet.create({
   expenseCategory: {
     margin: 10,
     padding: 10,
+  },
+  expenseDate: {
+    margin: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

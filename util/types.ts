@@ -1,3 +1,5 @@
+import { ParsedDate } from "./getDate";
+
 export type Category = {
   categoryName: string;
   categoryId: number;
@@ -6,4 +8,5 @@ export type Category = {
 export interface Expense {
   expenseAmount: number;
   expenseType: Category;
+  date: ParsedDate;
 }

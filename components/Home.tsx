@@ -24,6 +24,7 @@ import { Navigation } from "./Navigation";
 import { updateData } from "../slice/updateSlice";
 import { getExpensesUrl } from "../http/url";
 import { updateExpenses } from "../slice/expensesSlice";
+import { getDate } from "../util/getDate";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
@@ -55,18 +56,7 @@ export const Home = () => {
     if (!expenses) {
       return;
     }
-
-    const expensesArray: Expense[] = expenses.map((expense: any) => {
-      return {
-        expenseAmount: expense?.expenseAmount,
-        expenseType: {
-          categoryName: expense?.categoryName,
-          categoryId: expense?.categoryId,
-        },
-      };
-    });
-
-    dispatch(updateExpenses(expensesArray));
+    dispatch(updateExpenses(expenses));
   }
 
   useEffect(() => {
@@ -88,7 +78,9 @@ export const Home = () => {
       categoryName: "",
       categoryId: 0,
     },
+    date: getDate(),
   });
+  console.log(expense);
   const [feedback, setFeedback] = useState<string>("");
 
   function onPressAddExpense(textInput: string, selectedCategoryId: number) {
@@ -114,19 +106,22 @@ export const Home = () => {
       setFeedback("Not a number");
       return;
     }
-    //Set states
     setFeedback("");
     setExpense(() => {
       return {
         expenseAmount: parsedExpense,
         expenseType: category,
+        date: getDate(),
       };
     });
     dispatch(modalAction(true));
   }
 
   async function closeModal() {
+    // Send expense to backend
     await fetchPost(addExpenseUrl, expense);
+
+    // Clear expense
     setExpense(() => {
       return {
         expenseAmount: 0,
@@ -134,6 +129,7 @@ export const Home = () => {
           categoryName: "",
           categoryId: 0,
         },
+        date: getDate(),
       };
     });
     dispatch(updateData(true));
