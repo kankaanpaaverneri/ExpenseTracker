@@ -31,7 +31,7 @@ export const Categories = () => {
 
   async function closeModal() {
     if (!isCategoryNameValid(categoryName)) {
-      setInvalidCategory("Category name not valid");
+      setInvalidCategory("Category name is not valid");
       return;
     }
     let categoryIsUsed = false;
@@ -56,7 +56,6 @@ export const Categories = () => {
 
   async function removeCategory(categoryId: number) {
     if (categoryId === 0) return;
-    console.log(`${removeCategoryUrl}${categoryId}`);
     try {
       await fetchDelete(`${removeCategoryUrl}${categoryId}`);
       dispatch(updateData(true));
@@ -77,15 +76,19 @@ export const Categories = () => {
           data={categories}
           renderItem={({ item }) => {
             return (
-              <View style={styles.categoryItem}>
-                <View style={styles.categoryNameContainer}>
-                  <Text style={styles.categoryText}>{item.categoryName}</Text>
+              <View style={styles.category}>
+                <View style={styles.categoryItem}>
+                  <View style={styles.categoryNameContainer}>
+                    <Text style={styles.categoryText}>{item.categoryName}</Text>
+                  </View>
                 </View>
-                <View style={styles.removePressableContainer}>
-                  <Pressable onPress={() => removeCategory(item.categoryId)}>
-                    <Text style={styles.categoryText}>Delete</Text>
-                  </Pressable>
-                </View>
+                {item.categoryId !== 1 && (
+                  <View style={styles.removePressableContainer}>
+                    <Pressable onPress={() => removeCategory(item.categoryId)}>
+                      <Text style={styles.deleteButtonText}>🗑️</Text>
+                    </Pressable>
+                  </View>
+                )}
               </View>
             );
           }}
@@ -99,6 +102,9 @@ export const Categories = () => {
       </View>
       <CustomModal>
         <Text style={styles.title}>Add new Category</Text>
+        {invalidCategory.length > 0 && (
+          <Text style={{ color: errorColor }}>{invalidCategory}</Text>
+        )}
         <TextInput
           style={styles.textInput}
           placeholder="Type category name"
@@ -108,9 +114,7 @@ export const Categories = () => {
           value={categoryName}
           maxLength={20}
         />
-        {invalidCategory.length > 0 && (
-          <Text style={{ color: errorColor }}>{invalidCategory}</Text>
-        )}
+
         <CustomPressable onPress={closeModal} />
       </CustomModal>
     </View>
@@ -130,18 +134,24 @@ const styles = StyleSheet.create({
   },
 
   textInput: {
-    margin: 50,
+    margin: 10,
   },
   categoriesList: {
     margin: 10,
     height: 300,
     padding: 10,
   },
+  category: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
 
   categoryItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    minWidth: 200,
     margin: 5,
     backgroundColor: mainColor,
     borderRadius: 15,
@@ -152,7 +162,9 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   removePressableContainer: {
-    backgroundColor: "red",
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "black",
     padding: 10,
     borderRadius: 5,
     margin: 10,
@@ -160,5 +172,8 @@ const styles = StyleSheet.create({
 
   categoryText: {
     color: "white",
+  },
+  deleteButtonText: {
+    color: "black",
   },
 });

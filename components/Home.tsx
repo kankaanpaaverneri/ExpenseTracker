@@ -84,6 +84,14 @@ export const Home = () => {
   const [feedback, setFeedback] = useState<string>("");
 
   function onPressAddExpense(textInput: string, selectedCategoryId: number) {
+    if (textInput.includes(",")) {
+      const [_, after] = textInput.split(",");
+      if (after.length > 2) {
+        setFeedback("Decimals should be roundend to two.");
+        return;
+      }
+    }
+
     if (textInput.length === 0) {
       setFeedback("Enter an expense");
       return;

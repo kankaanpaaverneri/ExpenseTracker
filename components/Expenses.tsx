@@ -1,5 +1,6 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { useAppSelector } from "../hooks/hooks";
+import { Table } from "./Table";
 
 export const Expenses = () => {
   const expenses = useAppSelector((state) => state.expensesReducer.expenses);
@@ -11,29 +12,9 @@ export const Expenses = () => {
           <Text>No expenses available</Text>
         </View>
       )}
-
-      <View style={styles.expenseList}>
-        <FlatList
-          data={expenses}
-          renderItem={({ item }) => {
-            return (
-              <View style={styles.expenseItem}>
-                <Text style={styles.expenseAmount}>{item.expenseAmount}</Text>
-                <Text style={styles.expenseCategory}>
-                  {item.expenseType.categoryName}
-                </Text>
-                <View style={styles.expenseDate}>
-                  <Text>
-                    {item.date.year}.{item.date.month}.{item.date.day}
-                  </Text>
-                  <Text>
-                    {item.date.hours}:{item.date.minutes}:{item.date.seconds}
-                  </Text>
-                </View>
-              </View>
-            );
-          }}
-        />
+      <Table expenses={expenses} />
+      <View>
+        <Text>Filter</Text>
       </View>
     </View>
   );
