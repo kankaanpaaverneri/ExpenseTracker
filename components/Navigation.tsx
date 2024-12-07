@@ -2,6 +2,7 @@ import { View, Pressable, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ProfileScreenNavigationProp } from "../App";
 import { useAppDispatch } from "../hooks/hooks";
+
 export const Navigation = () => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
   const dispatch = useAppDispatch();

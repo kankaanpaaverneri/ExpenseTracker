@@ -1,13 +1,22 @@
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import { StyleSheet, View, Text, FlatList, Pressable } from "react-native";
 import { Expense } from "../util/types";
 import { mainColor } from "../util/colors";
+import { fetchDelete } from "../http/http";
+import { removeExpenseUrl } from "../http/url";
+import { useAppDispatch } from "../hooks/hooks";
+import { updateData } from "../slice/updateSlice";
 interface TableProps {
   expenses: Expense[];
 }
 
 export const Table = ({ expenses }: TableProps) => {
+  const dispatch = useAppDispatch();
+  async function deleteExpense(expenseId: number) {
+    await fetchDelete(`${removeExpenseUrl}${expenseId}`);
+    dispatch(updateData(true));
+  }
   return (
-    <View>
+    <View style={styles.tableContainer}>
       <View style={styles.tableHead}>
         <View style={styles.tableColumn}>
           <View style={styles.tableRow}>
@@ -18,6 +27,9 @@ export const Table = ({ expenses }: TableProps) => {
           </View>
           <View style={styles.tableRow}>
             <Text style={styles.headText}>Date</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.headText}>Delete</Text>
           </View>
         </View>
       </View>
@@ -44,6 +56,15 @@ export const Table = ({ expenses }: TableProps) => {
                 <Text style={styles.bodyText}>{formatedDate}</Text>
                 <Text style={styles.bodyText}>{formatedTime}</Text>
               </View>
+              <View style={styles.tableRow}>
+                <Pressable
+                  onPress={() => {
+                    deleteExpense(item.expenseId);
+                  }}
+                >
+                  <Text style={styles.deleteButton}>Delete</Text>
+                </Pressable>
+              </View>
             </View>
           );
         }}
@@ -54,8 +75,7 @@ export const Table = ({ expenses }: TableProps) => {
 
 const styles = StyleSheet.create({
   tableContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: "column",
   },
   tableHead: {
     flexDirection: "column",
@@ -70,12 +90,12 @@ const styles = StyleSheet.create({
   },
   tableColumn: {
     flexDirection: "row",
+    margin: 10,
   },
   tableRow: {
     alignItems: "center",
     justifyContent: "center",
-    width: 100,
-    margin: 10,
+    minWidth: 90,
   },
   headText: {
     textAlign: "center",
@@ -84,7 +104,13 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     textAlign: "center",
-    padding: 2,
-    margin: 1,
+    margin: 2,
+    fontSize: 12,
+  },
+  deleteButton: {
+    backgroundColor: mainColor,
+    color: "white",
+    padding: 10,
+    borderRadius: 5,
   },
 });

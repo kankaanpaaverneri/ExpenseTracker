@@ -56,6 +56,7 @@ export const Home = () => {
     if (!expenses) {
       return;
     }
+
     dispatch(updateExpenses(expenses));
   }
 
@@ -73,6 +74,7 @@ export const Home = () => {
   }
 
   const [expense, setExpense] = useState<Expense>({
+    expenseId: 0,
     expenseAmount: 0,
     expenseType: {
       categoryName: "",
@@ -80,7 +82,6 @@ export const Home = () => {
     },
     date: getDate(),
   });
-  console.log(expense);
   const [feedback, setFeedback] = useState<string>("");
 
   function onPressAddExpense(textInput: string, selectedCategoryId: number) {
@@ -117,6 +118,7 @@ export const Home = () => {
     setFeedback("");
     setExpense(() => {
       return {
+        expenseId: 0,
         expenseAmount: parsedExpense,
         expenseType: category,
         date: getDate(),
@@ -132,6 +134,7 @@ export const Home = () => {
     // Clear expense
     setExpense(() => {
       return {
+        expenseId: 0,
         expenseAmount: 0,
         expenseType: {
           categoryName: "",

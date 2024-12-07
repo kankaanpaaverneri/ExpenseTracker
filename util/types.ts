@@ -6,6 +6,7 @@ export type Category = {
 };
 
 export interface Expense {
+  expenseId: number;
   expenseAmount: number;
   expenseType: Category;
   date: ParsedDate;

@@ -6,3 +6,4 @@ export const addNewCategoryUrl = `${rootUrl}/add-new-category/`;
 export const removeCategoryUrl = `${rootUrl}/remove-category/`;
 export const addExpenseUrl = `${rootUrl}/add-expense`;
 export const getExpensesUrl = `${rootUrl}/get-expenses`;
+export const removeExpenseUrl = `${rootUrl}/remove-expense/`;

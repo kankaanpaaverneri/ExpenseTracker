@@ -1,21 +1,22 @@
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useAppSelector } from "../hooks/hooks";
 import { Table } from "./Table";
+import { FilterExpenses } from "./FilterExpenses";
 
 export const Expenses = () => {
   const expenses = useAppSelector((state) => state.expensesReducer.expenses);
   return (
     <View style={styles.expensesContainer}>
       <Text style={styles.title}>Expenses</Text>
+      <View>
+        <FilterExpenses />
+      </View>
       {expenses.length === 0 && (
         <View>
-          <Text>No expenses available</Text>
+          <Text style={styles.text}>No expenses available</Text>
         </View>
       )}
-      <Table expenses={expenses} />
-      <View>
-        <Text>Filter</Text>
-      </View>
+      {expenses.length > 0 && <Table expenses={expenses} />}
     </View>
   );
 };
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
   expensesContainer: {
     justifyContent: "center",
     alignItems: "center",
-    margin: 50,
+    margin: 1,
   },
   title: {
     fontSize: 25,
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    height: 500,
+    height: 200,
   },
   expenseItem: {
     flexDirection: "row",
@@ -53,5 +54,10 @@ const styles = StyleSheet.create({
     margin: 10,
     justifyContent: "center",
     alignItems: "center",
+  },
+  text: {
+    fontSize: 15,
+    padding: 10,
+    margin: 10,
   },
 });
