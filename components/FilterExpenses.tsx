@@ -2,34 +2,24 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { FilterByDate } from "./FilterByDate";
 import { FilterByCategory } from "./FilterByCategory";
 import { mainColor } from "../util/colors";
-import { useAppSelector } from "../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { useState, useEffect } from "react";
 import { dateFilterValid } from "../slice/dateFilterValid";
-
-export interface SelectedCategories {
-  categoryName: string;
-  categoryId: number;
-  selected: boolean;
-}
-
-export interface DateFilters {
-  from: string;
-  to: string;
-}
-
-export enum DateFilterType {
-  FROM,
-  TO,
-}
+import { DateFilters, CategoryFilters, DateFilterType } from "../util/types";
+import { fetchGet } from "../http/http";
+import { getExpensesUrl } from "../http/url";
+import { updateData } from "../slice/updateSlice";
+import { updateExpenseFilters } from "../slice/expensesSlice";
+import { formatDate } from "../util/getDate";
+import { current } from "@reduxjs/toolkit";
 
 export const FilterExpenses = () => {
   const categories = useAppSelector(
     (state) => state.categoriesReducer.categories,
   );
+  const dispatch = useAppDispatch();
 
-  const [selectedCategories, setSelectedCategories] = useState<
-    SelectedCategories[]
-  >([]);
+  const [categoryFilters, setCategoryFilters] = useState<CategoryFilters[]>([]);
 
   const [dateFilters, setDateFilters] = useState<DateFilters>({
     from: "",
@@ -41,15 +31,15 @@ export const FilterExpenses = () => {
   });
 
   function onPressCategory(categoryId: number) {
-    setSelectedCategories((prev) => {
-      const recent = prev;
-      const updated = recent.map((category) => {
-        if (categoryId === category.categoryId) {
-          category.selected = category.selected ? false : true;
+    setCategoryFilters((prev) => {
+      const updated = prev.map((p) => p);
+      return updated.map((category) => {
+        const copy = { ...category };
+        if (copy.categoryId === categoryId) {
+          copy.selected = copy.selected ? false : true;
         }
-        return category;
+        return copy;
       });
-      return updated;
     });
   }
 
@@ -74,17 +64,52 @@ export const FilterExpenses = () => {
     }
   }
 
-  function onPressFilter() {
-    setErrorInDates(() => {
-      return {
-        from: dateFilterValid(dateFilters.from) ? "" : "Not valid input",
-        to: dateFilterValid(dateFilters.to) ? "" : "Not valid input",
-      };
+  async function onPressFilter() {
+    let dateFiltersNotValid: boolean = false;
+    setErrorInDates((prevError) => {
+      const updatedError = { ...prevError };
+
+      if (!dateFilterValid(dateFilters.from)) {
+        updatedError.from = "Not valid input";
+        dateFiltersNotValid = true;
+      } else {
+        updatedError.from = "";
+      }
+
+      if (!dateFilterValid(dateFilters.to)) {
+        updatedError.to = "Not valid input";
+        dateFiltersNotValid = true;
+      } else {
+        updatedError.to = "";
+      }
+
+      if (dateFilters.from.length > 0 && dateFilters.to.length === 0) {
+        updatedError.to = "Both dates must be filled";
+        dateFiltersNotValid = true;
+      }
+
+      if (dateFilters.to.length > 0 && dateFilters.from.length === 0) {
+        updatedError.from = "Both dates must be filled";
+        dateFiltersNotValid = true;
+      }
+
+      return updatedError;
     });
+
+    if (dateFiltersNotValid) return;
+    const filtered = categoryFilters.filter((category) => category.selected);
+
+    dispatch(
+      updateExpenseFilters({
+        categoryFilters: filtered,
+        dateFilters: dateFilters,
+      }),
+    );
+    dispatch(updateData(true));
   }
 
   useEffect(() => {
-    setSelectedCategories(() => {
+    setCategoryFilters(() => {
       const updated = categories.map((category) => {
         return {
           categoryName: category.categoryName,
@@ -103,7 +128,7 @@ export const FilterExpenses = () => {
         <View style={styles.filterByData}>
           <Text style={styles.title}>Category</Text>
           <FilterByCategory
-            selectedCategories={selectedCategories}
+            categoryFilters={categoryFilters}
             onPressCategory={onPressCategory}
           />
         </View>

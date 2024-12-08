@@ -32,6 +32,9 @@ export const Home = () => {
     (state) => state.categoriesReducer.categories,
   );
   const update = useAppSelector((state) => state.updateReducer.update);
+  const expenseFilters = useAppSelector(
+    (state) => state.expensesReducer.expenseFilters,
+  );
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -47,17 +50,22 @@ export const Home = () => {
       dispatch(updateCategories(categories));
       setLoading(false);
     } catch (error) {
-      setError("Error fetching data from server");
+      setError("Error fetching categories");
+      console.error(error);
     }
   }
 
   async function getExpenses() {
-    const { expenses } = await fetchGet(getExpensesUrl);
-    if (!expenses) {
-      return;
+    try {
+      const { expenses } = await fetchGet(getExpensesUrl, expenseFilters);
+      if (!expenses) {
+        return;
+      }
+      dispatch(updateExpenses(expenses));
+    } catch (error) {
+      setError("Error fetching expenses");
+      console.error(error);
     }
-
-    dispatch(updateExpenses(expenses));
   }
 
   useEffect(() => {
@@ -165,13 +173,14 @@ export const Home = () => {
             color={mainColor}
           />
         )}
-        {error && <Error error={error} onPressTryAgain={onPressTryAgain} />}
+
         {categories.length > 0 && (
           <AddExpense
             feedback={feedback}
             onPressAddExpense={onPressAddExpense}
           />
         )}
+        {error && <Error error={error} onPressTryAgain={onPressTryAgain} />}
         <Navigation />
       </View>
     </TouchableWithoutFeedback>

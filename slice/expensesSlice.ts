@@ -1,13 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { Expense } from "../util/types";
+import { Expense, ExpenseFilters } from "../util/types";
 
 interface Expenses {
   expenses: Expense[];
+  expenseFilters: ExpenseFilters;
 }
 
 const initialState: Expenses = {
   expenses: [],
+  expenseFilters: {
+    categoryFilters: [],
+    dateFilters: {
+      from: "",
+      to: "",
+    },
+  },
 };
 
 export const expenseSlice = createSlice({
@@ -17,8 +25,11 @@ export const expenseSlice = createSlice({
     updateExpenses: (state, action: PayloadAction<Expense[]>) => {
       state.expenses = action.payload.map((expense) => expense);
     },
+    updateExpenseFilters: (state, action: PayloadAction<ExpenseFilters>) => {
+      state.expenseFilters = action.payload;
+    },
   },
 });
 
-export const { updateExpenses } = expenseSlice.actions;
+export const { updateExpenses, updateExpenseFilters } = expenseSlice.actions;
 export default expenseSlice.reducer;

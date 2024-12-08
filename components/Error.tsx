@@ -20,12 +20,12 @@ export const Error = ({ error, onPressTryAgain }: ErrorProps) => {
 const styles = StyleSheet.create({
   errorContainer: {
     alignItems: "center",
-    margin: 20,
+    margin: 10,
   },
   errorText: {
-    fontSize: 20,
+    fontSize: 15,
     textAlign: "center",
-    margin: 50,
+    margin: 10,
   },
   pressable: {
     backgroundColor: mainColor,

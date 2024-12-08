@@ -11,3 +11,24 @@ export interface Expense {
   expenseType: Category;
   date: ParsedDate;
 }
+
+export interface CategoryFilters {
+  categoryName: string;
+  categoryId: number;
+  selected: boolean;
+}
+
+export interface DateFilters {
+  from: string;
+  to: string;
+}
+
+export enum DateFilterType {
+  FROM,
+  TO,
+}
+
+export interface ExpenseFilters {
+  categoryFilters: CategoryFilters[];
+  dateFilters: DateFilters;
+}

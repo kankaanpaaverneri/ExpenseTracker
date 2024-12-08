@@ -19,3 +19,15 @@ export function getDate(): ParsedDate {
   };
   return parsedDate;
 }
+
+export function formatDate(date: Date): ParsedDate {
+  const formatedDate = {
+    day: date.getDate(),
+    month: date.getMonth() + 1,
+    year: date.getFullYear(),
+    hours: date.getHours(),
+    minutes: date.getMinutes(),
+    seconds: date.getSeconds(),
+  };
+  return formatedDate;
+}

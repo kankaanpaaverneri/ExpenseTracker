@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    margin: 50,
+    margin: 20,
   },
   inputContainer: {
     flexDirection: "row",
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   pressable: {
     backgroundColor: mainColor,
-    margin: 50,
+    margin: 20,
     borderRadius: 15,
     padding: 10,
   },

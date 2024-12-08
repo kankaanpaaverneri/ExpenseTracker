@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, TextInput } from "react-native";
-import { DateFilters, DateFilterType } from "./FilterExpenses";
+import { DateFilters, DateFilterType } from "../util/types";
 import { errorColor } from "../util/colors";
+import { formatDate } from "../util/getDate";
 
 interface FilterByDateProps {
   dateFilters: DateFilters;
@@ -13,6 +14,9 @@ export const FilterByDate = ({
   onChangeDateFilters,
   errorInDates,
 }: FilterByDateProps) => {
+  const currentDate = new Date();
+  const placeHolderDate = formatDate(currentDate);
+
   return (
     <View style={styles.filterByDateContainer}>
       <View style={styles.dateInputContainer}>
@@ -35,7 +39,7 @@ export const FilterByDate = ({
           onChangeText={(e) => onChangeDateFilters(e, DateFilterType.TO)}
           maxLength={10}
           style={styles.dateInput}
-          placeholder="01.06.2024"
+          placeholder={`${placeHolderDate.day}.${placeHolderDate.month}.${placeHolderDate.year}`}
         />
         {errorInDates.to.length > 0 && (
           <Text style={{ color: errorColor }}>{errorInDates.to}</Text>

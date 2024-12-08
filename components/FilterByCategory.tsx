@@ -1,19 +1,20 @@
 import { FlatList, Text, StyleSheet, Pressable } from "react-native";
 import { mainColor } from "../util/colors";
-import { SelectedCategories } from "./FilterExpenses";
+import { CategoryFilters } from "../util/types";
+
 interface FilterByCategoryProps {
-  selectedCategories: SelectedCategories[];
+  categoryFilters: CategoryFilters[];
   onPressCategory: (categoryId: number) => void;
 }
 
 export const FilterByCategory = ({
-  selectedCategories,
+  categoryFilters,
   onPressCategory,
 }: FilterByCategoryProps) => {
   return (
     <FlatList
       style={styles.listContainer}
-      data={selectedCategories}
+      data={categoryFilters}
       keyExtractor={(item) => item.categoryId.toString()}
       renderItem={({ item }) => {
         return (
