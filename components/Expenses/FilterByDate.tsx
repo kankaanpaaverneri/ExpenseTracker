@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, TextInput } from "react-native";
-import { DateFilters, DateFilterType } from "../util/types";
-import { errorColor } from "../util/colors";
-import { formatDate } from "../util/getDate";
+import { DateFilters, DateFilterType } from "../../util/types";
+import { errorColor } from "../../util/colors";
+import { formatDate } from "../../util/getDate";
 
 interface FilterByDateProps {
   dateFilters: DateFilters;

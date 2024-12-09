@@ -1,7 +1,6 @@
 import { Modal, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { useAppSelector, useAppDispatch } from "../hooks/hooks";
-import { modalAction } from "../slice/modalSlice";
+import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
 
 interface CustomModalProps {
   children: React.ReactNode;

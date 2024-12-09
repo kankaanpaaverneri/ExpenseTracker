@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import { mainColor } from "../util/colors";
+import { mainColor } from "../../util/colors";
 
 interface ErrorProps {
   error: string;

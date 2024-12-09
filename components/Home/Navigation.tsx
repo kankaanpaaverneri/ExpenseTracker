@@ -1,11 +1,9 @@
 import { View, Pressable, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { ProfileScreenNavigationProp } from "../App";
-import { useAppDispatch } from "../hooks/hooks";
+import { ProfileScreenNavigationProp } from "../../App";
 
 export const Navigation = () => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
-  const dispatch = useAppDispatch();
   return (
     <View style={styles.navigationContainer}>
       <Pressable

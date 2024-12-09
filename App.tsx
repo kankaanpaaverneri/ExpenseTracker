@@ -1,9 +1,9 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Home } from "./components/Home";
-import { Categories } from "./components/Categories";
-import { Expenses } from "./components/Expenses";
-import { Account } from "./components/Account";
+import { Home } from "./components/Home/Home";
+import { Categories } from "./components/Categories/Categories";
+import { Expenses } from "./components/Expenses/Expenses";
+import { Account } from "./components/Account/Account";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 

@@ -1,17 +1,13 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { FilterByDate } from "./FilterByDate";
 import { FilterByCategory } from "./FilterByCategory";
-import { mainColor } from "../util/colors";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { mainColor } from "../../util/colors";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { useState, useEffect } from "react";
-import { dateFilterValid } from "../slice/dateFilterValid";
-import { DateFilters, CategoryFilters, DateFilterType } from "../util/types";
-import { fetchGet } from "../http/http";
-import { getExpensesUrl } from "../http/url";
-import { updateData } from "../slice/updateSlice";
-import { updateExpenseFilters } from "../slice/expensesSlice";
-import { formatDate } from "../util/getDate";
-import { current } from "@reduxjs/toolkit";
+import { dateFilterValid } from "../../slice/dateFilterValid";
+import { DateFilters, CategoryFilters, DateFilterType } from "../../util/types";
+import { updateData } from "../../slice/updateSlice";
+import { updateExpenseFilters } from "../../slice/expensesSlice";
 
 export const FilterExpenses = () => {
   const categories = useAppSelector(

@@ -8,23 +8,24 @@ import {
   ActivityIndicator,
 } from "react-native";
 import AddExpense from "./AddExpense";
-import { parseExpense } from "../util/parseExpense";
-import { Expense } from "../util/types";
-import { CustomModal } from "./CustomModal";
-import { findCategory } from "../util/findCategory";
-import { fetchGet, fetchPost } from "../http/http";
-import { addExpenseUrl, getCategoriesUrl } from "../http/url";
-import { mainColor } from "../util/colors";
+import { parseExpense } from "../../util/parseExpense";
+import { Expense } from "../../util/types";
+import { CustomModal } from "../Custom/CustomModal";
+import { findCategory } from "../../util/findCategory";
+import { fetchGet, fetchPost } from "../../http/http";
+import { addExpenseUrl, getCategoriesUrl } from "../../http/url";
+import { mainColor } from "../../util/colors";
 import { Error } from "./Error";
-import { useAppSelector, useAppDispatch } from "../hooks/hooks";
-import { updateCategories } from "../slice/categoriesSlice";
-import { modalAction } from "../slice/modalSlice";
-import { CustomPressable } from "./CustomPressable";
+import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
+import { updateCategories } from "../../slice/categoriesSlice";
+import { modalAction } from "../../slice/modalSlice";
+import { CustomPressable } from "../Custom/CustomPressable";
 import { Navigation } from "./Navigation";
-import { updateData } from "../slice/updateSlice";
-import { getExpensesUrl } from "../http/url";
-import { updateExpenses } from "../slice/expensesSlice";
-import { getDate } from "../util/getDate";
+import { updateData } from "../../slice/updateSlice";
+import { getExpensesUrl } from "../../http/url";
+import { updateExpenses } from "../../slice/expensesSlice";
+import { getDate } from "../../util/getDate";
+import { validateAddExpenseInput } from "../../util/validateAddExpenseInput";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
@@ -93,27 +94,14 @@ export const Home = () => {
   const [feedback, setFeedback] = useState<string>("");
 
   function onPressAddExpense(textInput: string, selectedCategoryId: number) {
-    if (textInput.includes(",")) {
-      const [_, after] = textInput.split(",");
-      if (after.length > 2) {
-        setFeedback("Decimals should be roundend to two.");
-        return;
-      }
-    }
-
-    if (textInput.length === 0) {
-      setFeedback("Enter an expense");
-      return;
-    }
-
-    if (selectedCategoryId === 0) {
-      setFeedback("Select a category");
+    const errorMessage = validateAddExpenseInput(textInput, selectedCategoryId);
+    if (errorMessage.length > 0) {
+      setFeedback(errorMessage);
       return;
     }
 
     // Parse textInput
     const parsedExpense: number = parseExpense(textInput);
-
     //Find category from categories list
     const category = findCategory(categories, selectedCategoryId);
     if (!category) return;
@@ -163,7 +151,9 @@ export const Home = () => {
             {expense.expenseAmount.toFixed(2)}€ spent on
           </Text>
           <Text style={styles.text}>{expense.expenseType.categoryName}</Text>
-          <CustomPressable onPress={closeModal} />
+          <CustomPressable onPress={closeModal}>
+            <Text style={styles.okButton}>Ok</Text>
+          </CustomPressable>
         </CustomModal>
         <Text style={styles.title}>Expense Tracker</Text>
         {loading && (
@@ -173,7 +163,6 @@ export const Home = () => {
             color={mainColor}
           />
         )}
-
         {categories.length > 0 && (
           <AddExpense
             feedback={feedback}
@@ -202,5 +191,18 @@ const styles = StyleSheet.create({
   },
   activityIndicator: {
     margin: 10,
+  },
+  okButton: {
+    fontSize: 20,
+    justifyContent: "center",
+    alignSelf: "center",
+    backgroundColor: "#465aa6",
+    color: "white",
+    borderRadius: 10,
+    paddingLeft: 70,
+    paddingRight: 70,
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginTop: 10,
   },
 });

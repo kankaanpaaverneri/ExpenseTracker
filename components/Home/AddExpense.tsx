@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Pressable, View, Text, StyleSheet } from "react-native";
 import TextInputContainer from "./TextInputContainer";
 import { AddExpenseCategory } from "./AddExpenseCategory";
-import { mainColor } from "../util/colors";
+import { mainColor } from "../../util/colors";
 
 interface AddExpenseProps {
   onPressAddExpense: (textInput: string, selectedCategoryId: number) => void;

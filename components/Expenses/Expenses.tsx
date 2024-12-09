@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import { useAppSelector } from "../hooks/hooks";
+import { useAppSelector } from "../../hooks/hooks";
 import { Table } from "./Table";
 import { FilterExpenses } from "./FilterExpenses";
 

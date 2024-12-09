@@ -1,7 +1,7 @@
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import { Category } from "../util/types";
-import { mainColor } from "../util/colors";
-import { useAppSelector } from "../hooks/hooks";
+import { Category } from "../../util/types";
+import { mainColor } from "../../util/colors";
+import { useAppSelector } from "../../hooks/hooks";
 
 interface AddExpenseCategoryProps {
   onSelectCategory: (categoryId: number) => void;

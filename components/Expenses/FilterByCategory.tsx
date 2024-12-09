@@ -1,6 +1,6 @@
 import { FlatList, Text, StyleSheet, Pressable } from "react-native";
-import { mainColor } from "../util/colors";
-import { CategoryFilters } from "../util/types";
+import { mainColor } from "../../util/colors";
+import { CategoryFilters } from "../../util/types";
 
 interface FilterByCategoryProps {
   categoryFilters: CategoryFilters[];

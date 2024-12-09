@@ -1,10 +1,10 @@
 import { StyleSheet, View, Text, FlatList, Pressable } from "react-native";
-import { Expense } from "../util/types";
-import { mainColor } from "../util/colors";
-import { fetchDelete } from "../http/http";
-import { removeExpenseUrl } from "../http/url";
-import { useAppDispatch } from "../hooks/hooks";
-import { updateData } from "../slice/updateSlice";
+import { Expense } from "../../util/types";
+import { mainColor } from "../../util/colors";
+import { fetchDelete } from "../../http/http";
+import { removeExpenseUrl } from "../../http/url";
+import { useAppDispatch } from "../../hooks/hooks";
+import { updateData } from "../../slice/updateSlice";
 interface TableProps {
   expenses: Expense[];
 }

@@ -6,16 +6,17 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { errorColor, mainColor } from "../util/colors";
-import { fetchDelete, fetchPost } from "../http/http";
-import { addNewCategoryUrl, removeCategoryUrl } from "../http/url";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { modalAction } from "../slice/modalSlice";
-import { CustomModal } from "./CustomModal";
-import { CustomPressable } from "./CustomPressable";
+import { errorColor, mainColor } from "../../util/colors";
+import { fetchDelete, fetchPost } from "../../http/http";
+import { addNewCategoryUrl, removeCategoryUrl } from "../../http/url";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { modalAction } from "../../slice/modalSlice";
+import { CustomModal } from "../Custom/CustomModal";
+import { CustomPressable } from "../Custom/CustomPressable";
 import { useState } from "react";
-import { isCategoryNameValid } from "../util/isCategoryNameValid";
-import { updateData } from "../slice/updateSlice";
+import { isCategoryNameValid } from "../../util/isCategoryNameValid";
+import { updateData } from "../../slice/updateSlice";
+import { CategoriesList } from "./CategoriesList";
 
 export const Categories = () => {
   const categories = useAppSelector(
@@ -54,6 +55,10 @@ export const Categories = () => {
     dispatch(updateData(true));
   }
 
+  function cancelModal() {
+    dispatch(modalAction(false));
+  }
+
   async function removeCategory(categoryId: number) {
     if (categoryId === 0) return;
     try {
@@ -69,32 +74,7 @@ export const Categories = () => {
       <View>
         <Text style={styles.title}>Categories</Text>
       </View>
-      <View style={styles.categoriesList}>
-        {categories.length === 0 && <Text>No categories</Text>}
-        <FlatList
-          style={{ paddingLeft: 20, paddingRight: 20 }}
-          data={categories}
-          renderItem={({ item }) => {
-            return (
-              <View style={styles.category}>
-                <View style={styles.categoryItem}>
-                  <View style={styles.categoryNameContainer}>
-                    <Text style={styles.categoryText}>{item.categoryName}</Text>
-                  </View>
-                </View>
-                {item.categoryId !== 1 && (
-                  <View style={styles.removePressableContainer}>
-                    <Pressable onPress={() => removeCategory(item.categoryId)}>
-                      <Text style={styles.deleteButtonText}>🗑️</Text>
-                    </Pressable>
-                  </View>
-                )}
-              </View>
-            );
-          }}
-          keyExtractor={(item) => item.categoryId.toString()}
-        />
-      </View>
+      <CategoriesList categories={categories} removeCategory={removeCategory} />
       <View style={{ margin: 50 }}>
         <Pressable onPress={openModal}>
           <Text>Add new Category</Text>
@@ -114,8 +94,12 @@ export const Categories = () => {
           value={categoryName}
           maxLength={20}
         />
-
-        <CustomPressable onPress={closeModal} />
+        <CustomPressable onPress={closeModal}>
+          <Text style={styles.okButton}>Ok</Text>
+        </CustomPressable>
+        <CustomPressable onPress={cancelModal}>
+          <Text style={styles.cancelButton}>Cancel</Text>
+        </CustomPressable>
       </CustomModal>
     </View>
   );
@@ -136,44 +120,31 @@ const styles = StyleSheet.create({
   textInput: {
     margin: 10,
   },
-  categoriesList: {
-    margin: 10,
-    height: 300,
-    padding: 10,
-  },
-  category: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
 
-  categoryItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    minWidth: 200,
-    margin: 5,
-    backgroundColor: mainColor,
-    borderRadius: 15,
-    padding: 20,
-  },
-
-  categoryNameContainer: {
-    margin: 10,
-  },
-  removePressableContainer: {
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "black",
-    padding: 10,
-    borderRadius: 5,
-    margin: 10,
-  },
-
-  categoryText: {
+  okButton: {
+    fontSize: 20,
+    backgroundColor: "#465aa6",
     color: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderRadius: 10,
+    margin: 10,
   },
-  deleteButtonText: {
-    color: "black",
+  cancelButton: {
+    fontSize: 20,
+    backgroundColor: errorColor,
+    color: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderRadius: 10,
+    margin: 10,
   },
 });
