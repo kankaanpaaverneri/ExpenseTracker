@@ -5,12 +5,19 @@ import { isAccountValid } from "../../util/isAccountValid";
 import { fetchPost } from "../../http/http";
 import { addNewUserUrl } from "../../http/url";
 import { User } from "../../util/types";
+import { useAppDispatch } from "../../hooks/hooks";
+import { modalAction } from "../../slice/modalSlice";
+import { CustomModal } from "../Custom/CustomModal";
+import { useNavigation } from "@react-navigation/native";
+import { ProfileScreenNavigationProp } from "../../App";
 
 export const CreateAccount = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   async function onPressCreate() {
     const errorMessage = isAccountValid(username, password, confirmPassword);
@@ -26,15 +33,42 @@ export const CreateAccount = () => {
       password: password,
     };
 
-    const response = await fetchPost(addNewUserUrl, user);
-    console.log("response: ", response);
+    try {
+      const response = await fetchPost(addNewUserUrl, user);
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result);
+      }
+    } catch (error) {
+      setFeedback("Something went wrong");
+      return;
+    }
+    setFeedback("");
     setUsername("");
     setPassword("");
     setConfirmPassword("");
+    openModal();
+  }
+
+  function openModal() {
+    dispatch(modalAction(true));
+  }
+
+  function closeModal() {
+    dispatch(modalAction(false));
+    navigation.goBack();
   }
 
   return (
     <View style={styles.createAccountContainer}>
+      <CustomModal>
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalHeading}>Account created</Text>
+          <Pressable onPress={closeModal}>
+            <Text style={styles.okButton}>Ok</Text>
+          </Pressable>
+        </View>
+      </CustomModal>
       <View style={styles.headingContainer}>
         <Text style={styles.heading}>Create an account</Text>
       </View>
@@ -121,5 +155,26 @@ const styles = StyleSheet.create({
   },
   feedbackText: {
     color: errorColor,
+  },
+
+  modalContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalHeading: {
+    margin: 20,
+    fontSize: 25,
+  },
+  okButton: {
+    fontSize: 15,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 10,
+    paddingTop: 10,
+    backgroundColor: mainColor,
+    color: "white",
+    margin: 10,
+    borderRadius: 5,
   },
 });

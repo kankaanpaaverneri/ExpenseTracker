@@ -20,9 +20,7 @@ export async function fetchPost(url: string, data: Object) {
     },
     body: JSON.stringify(data),
   });
-
-  const result = await response.json();
-  return result;
+  return response;
 }
 
 export async function fetchDelete(url: string) {

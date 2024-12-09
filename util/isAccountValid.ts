@@ -1,4 +1,4 @@
-import { passwordmaxLength, usernameMaxLength } from "./constants";
+import { passwordMaxLength, usernameMaxLength } from "./constants";
 
 export function isAccountValid(
   username: string,
@@ -6,7 +6,7 @@ export function isAccountValid(
   confirmPassword: string,
 ): string {
   if (password !== confirmPassword) {
-    return "Passwords do not match";
+    return "Passwords do not match.";
   }
 
   if (
@@ -14,18 +14,18 @@ export function isAccountValid(
     confirmPassword.length === 0 ||
     username.length === 0
   ) {
-    return "Missing field";
+    return "Missing field.";
   }
 
   if (username.length > usernameMaxLength) {
-    return "Username too long";
+    return "Username is too long.";
   }
 
   if (
-    password.length > passwordmaxLength ||
-    confirmPassword.length > passwordmaxLength
+    password.length > passwordMaxLength ||
+    confirmPassword.length > passwordMaxLength
   ) {
-    return "Password too long";
+    return "Password is too long.";
   }
 
   return "";

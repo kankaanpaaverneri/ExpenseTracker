@@ -43,11 +43,19 @@ export const Categories = () => {
     setInvalidCategory("");
     setCategoryName("");
     try {
-      await fetchPost(addNewCategoryUrl, { categoryName: categoryName });
+      const response = await fetchPost(addNewCategoryUrl, {
+        categoryName: categoryName,
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result);
+      }
     } catch (error) {
-      console.error("Something went wrong");
+      setInvalidCategory("Something went wrong");
       return;
     }
+    setInvalidCategory("");
 
     dispatch(modalAction(false));
     dispatch(updateData(true));
