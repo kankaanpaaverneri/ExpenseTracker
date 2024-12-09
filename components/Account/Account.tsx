@@ -1,9 +1,10 @@
 import { View, Text } from "react-native";
+import { CreateAccount } from "./CreateAccount";
 
 export const Account = () => {
   return (
     <View>
-      <Text>Account</Text>
+      <CreateAccount />
     </View>
   );
 };

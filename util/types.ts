@@ -32,3 +32,9 @@ export interface ExpenseFilters {
   categoryFilters: CategoryFilters[];
   dateFilters: DateFilters;
 }
+
+export interface User {
+  userId: number;
+  username: string;
+  password: string;
+}

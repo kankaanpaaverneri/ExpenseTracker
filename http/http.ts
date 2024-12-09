@@ -1,11 +1,6 @@
-import { CategoryFilters, DateFilters } from "../util/types";
+import { ExpenseFilters } from "../util/types";
 
-interface Filters {
-  categoryFilters: CategoryFilters[];
-  dateFilters: DateFilters;
-}
-
-export async function fetchGet(url: string, filters?: Filters) {
+export async function fetchGet(url: string, filters?: ExpenseFilters) {
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -18,13 +13,16 @@ export async function fetchGet(url: string, filters?: Filters) {
 }
 
 export async function fetchPost(url: string, data: Object) {
-  await fetch(url, {
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
   });
+
+  const result = await response.json();
+  return result;
 }
 
 export async function fetchDelete(url: string) {
