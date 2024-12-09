@@ -14,7 +14,10 @@ import { modalAction } from "../../slice/modalSlice";
 import { CustomModal } from "../Custom/CustomModal";
 import { CustomPressable } from "../Custom/CustomPressable";
 import { useState } from "react";
-import { isCategoryNameValid } from "../../util/isCategoryNameValid";
+import {
+  isCategoryNameValid,
+  validateCategoryName,
+} from "../../util/isCategoryNameValid";
 import { updateData } from "../../slice/updateSlice";
 import { CategoriesList } from "./CategoriesList";
 
@@ -31,26 +34,21 @@ export const Categories = () => {
   }
 
   async function closeModal() {
-    if (!isCategoryNameValid(categoryName)) {
-      setInvalidCategory("Category name is not valid");
-      return;
-    }
-    let categoryIsUsed = false;
-    categories.forEach((category) => {
-      if (category.categoryName === categoryName) {
-        categoryIsUsed = true;
-        return;
-      }
-    });
-
-    if (categoryIsUsed) {
-      setInvalidCategory("Category name is used");
+    const errorMessage = validateCategoryName(categoryName, categories);
+    if (errorMessage.length > 0) {
+      setInvalidCategory(errorMessage);
       return;
     }
 
     setInvalidCategory("");
     setCategoryName("");
-    await fetchPost(addNewCategoryUrl, { categoryName: categoryName });
+    try {
+      await fetchPost(addNewCategoryUrl, { categoryName: categoryName });
+    } catch (error) {
+      console.error("Something went wrong");
+      return;
+    }
+
     dispatch(modalAction(false));
     dispatch(updateData(true));
   }

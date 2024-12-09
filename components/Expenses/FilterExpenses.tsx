@@ -4,7 +4,7 @@ import { FilterByCategory } from "./FilterByCategory";
 import { mainColor } from "../../util/colors";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { useState, useEffect } from "react";
-import { dateFilterValid } from "../../slice/dateFilterValid";
+import { dateFilterValid } from "../../util/dateFilterValid";
 import { DateFilters, CategoryFilters, DateFilterType } from "../../util/types";
 import { updateData } from "../../slice/updateSlice";
 import { updateExpenseFilters } from "../../slice/expensesSlice";

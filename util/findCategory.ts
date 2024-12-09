@@ -9,3 +9,13 @@ export function findCategory(
   );
   return category;
 }
+
+export function isCategoryNameUsed(
+  categoryName: string,
+  categories: Category[],
+): boolean {
+  const result = categories.find(
+    (category) => category.categoryName === categoryName,
+  );
+  return result ? true : false;
+}
