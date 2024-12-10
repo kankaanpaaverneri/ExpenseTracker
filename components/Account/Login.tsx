@@ -5,11 +5,20 @@ import { useState } from "react";
 import { fetchPost } from "../../http/http";
 import { loginUrl } from "../../http/url";
 import { LoginData } from "../../util/types";
+import { useAppDispatch } from "../../hooks/hooks";
+import { setUser, UserState } from "../../slice/userSlice";
+import { parseUser } from "../../util/parseUser";
+import { validateUser } from "../../util/validateUser";
 
-export const Login = () => {
+interface LoginProps {
+  openModal: () => void;
+}
+
+export const Login = ({ openModal }: LoginProps) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
+  const dispatch = useAppDispatch();
   async function onPressLogin() {
     const errorMessage = isLoginValid(username, password);
     if (errorMessage.length > 0) {
@@ -24,12 +33,19 @@ export const Login = () => {
     };
     try {
       const response = await fetchPost(loginUrl, loginData);
+      const result = await response.json();
       if (!response.ok) {
-        const result = await response.json();
         throw new Error(result);
       }
+      const user: UserState = parseUser(result);
+      if (!validateUser(user)) {
+        return;
+      }
+
+      dispatch(setUser(user));
+      openModal();
     } catch (error) {
-      setFeedback("Something went wrong");
+      setFeedback(`Username or password is incorrect`);
       return;
     }
     setFeedback("");
@@ -104,6 +120,8 @@ const styles = StyleSheet.create({
   },
   feedbackContainer: {
     flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
     margin: 10,
   },
   feedbackText: {

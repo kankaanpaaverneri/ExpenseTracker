@@ -36,6 +36,7 @@ export const Home = () => {
   const expenseFilters = useAppSelector(
     (state) => state.expensesReducer.expenseFilters,
   );
+  const currentUser = useAppSelector((state) => state.userReducer);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -155,6 +156,12 @@ export const Home = () => {
             <Text style={styles.okButton}>Ok</Text>
           </CustomPressable>
         </CustomModal>
+        <View style={styles.userContainer}>
+          <Text style={styles.userText}>
+            Current user{" "}
+            <Text style={{ fontWeight: "bold" }}>{currentUser.username}</Text>
+          </Text>
+        </View>
         <Text style={styles.title}>Expense Tracker</Text>
         {loading && (
           <ActivityIndicator
@@ -204,5 +211,15 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     marginTop: 10,
+  },
+
+  userContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 20,
+  },
+  userText: {
+    fontSize: 15,
   },
 });
