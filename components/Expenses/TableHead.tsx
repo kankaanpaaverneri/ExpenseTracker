@@ -32,8 +32,9 @@ const styles = StyleSheet.create({
     backgroundColor: mainColor,
   },
   headText: {
+    fontSize: 12,
     textAlign: "center",
-    margin: 1,
+    flexWrap: "nowrap",
     color: "white",
   },
   tableColumn: {

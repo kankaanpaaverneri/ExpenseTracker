@@ -4,6 +4,7 @@ import modalReducer from "../slice/modalSlice";
 import updateReducer from "../slice/updateSlice";
 import expensesReducer from "../slice/expensesSlice";
 import userReducer from "../slice/userSlice";
+import usersReducer from "../slice/usersSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     updateReducer,
     expensesReducer,
     userReducer,
+    usersReducer,
   },
 });
 

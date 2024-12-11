@@ -1,9 +1,12 @@
 import { View, Pressable, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ProfileScreenNavigationProp } from "../../App";
+import { useAppDispatch } from "../../hooks/hooks";
+import { updateData } from "../../slice/updateSlice";
 
 export const Navigation = () => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
+  const dispatch = useAppDispatch();
   return (
     <View style={styles.navigationContainer}>
       <Pressable
@@ -14,7 +17,9 @@ export const Navigation = () => {
       </Pressable>
       <Pressable
         style={styles.navigationItem}
-        onPress={() => navigation.navigate("Expenses")}
+        onPress={() => {
+          navigation.navigate("Expenses");
+        }}
       >
         <Text>Expenses</Text>
       </Pressable>

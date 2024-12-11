@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
   listContainer: {
     flexDirection: "column",
     height: 100,
-    padding: 10,
+    width: 300,
+    padding: 1,
   },
   listItem: {
     margin: 1,

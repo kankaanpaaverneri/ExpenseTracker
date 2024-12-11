@@ -18,6 +18,7 @@ import {
   addExpenseUrl,
   getCategoriesUrl,
   getCurrentUserUrl,
+  getUsersUrl,
 } from "../../http/url";
 import { mainColor } from "../../util/colors";
 import { ErrorComponent } from "./ErrorComponent";
@@ -31,6 +32,7 @@ import { updateExpenses } from "../../slice/expensesSlice";
 import { getDate } from "../../util/getDate";
 import { validateAddExpenseInput } from "../../util/validateAddExpenseInput";
 import { setUser } from "../../slice/userSlice";
+import { updateUsers } from "../../slice/usersSlice";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
@@ -89,11 +91,25 @@ export const Home = () => {
     }
   }
 
+  async function getUsers() {
+    try {
+      const response = await fetchGet(getUsersUrl, expenseFilters);
+      if (!response.ok) {
+        throw new Error();
+      }
+      const result = await response.json();
+      dispatch(updateUsers(result));
+    } catch (error) {
+      setError("Error getting all users");
+    }
+  }
+
   useEffect(() => {
     if (update) {
       getCategories();
       getExpenses();
       getCurrentUser();
+      getUsers();
       dispatch(updateData(false));
     }
   }, [update]);

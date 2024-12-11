@@ -25,6 +25,12 @@ export interface DateFilters {
   to: string;
 }
 
+export interface UserFilters {
+  userId: number;
+  username: string;
+  selected: boolean;
+}
+
 export enum DateFilterType {
   FROM,
   TO,
@@ -33,6 +39,7 @@ export enum DateFilterType {
 export interface ExpenseFilters {
   categoryFilters: CategoryFilters[];
   dateFilters: DateFilters;
+  userFilters: UserFilters[];
 }
 
 export interface User {
@@ -44,4 +51,16 @@ export interface User {
 export interface LoginData {
   username: string;
   password: string;
+}
+
+export enum NavigationItemId {
+  None,
+  Category,
+  Date,
+  User,
+}
+
+export interface NavigationItem {
+  id: NavigationItemId;
+  name: string;
 }

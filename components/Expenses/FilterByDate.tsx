@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    width: 150,
-    padding: 10,
+    width: 300,
+    height: 100,
   },
   dateInputContainer: {
     flexDirection: "column",

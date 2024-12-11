@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { Expense, ExpenseFilters } from "../util/types";
+import { Expense, ExpenseFilters, UserFilters } from "../util/types";
 
 interface Expenses {
   expenses: Expense[];
@@ -15,6 +15,7 @@ const initialState: Expenses = {
       from: "",
       to: "",
     },
+    userFilters: [],
   },
 };
 
