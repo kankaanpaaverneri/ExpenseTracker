@@ -1,12 +1,15 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { mainColor } from "../../util/colors";
 
-interface ErrorProps {
+interface ErrorComponentProps {
   error: string;
   onPressTryAgain: () => void;
 }
 
-export const Error = ({ error, onPressTryAgain }: ErrorProps) => {
+export const ErrorComponent = ({
+  error,
+  onPressTryAgain,
+}: ErrorComponentProps) => {
   return (
     <View style={styles.errorContainer}>
       <Text style={styles.errorText}>{error}</Text>

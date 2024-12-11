@@ -9,6 +9,8 @@ export interface Expense {
   expenseId: number;
   expenseAmount: number;
   expenseType: Category;
+  userId: number;
+  username: string;
   date: ParsedDate;
 }
 

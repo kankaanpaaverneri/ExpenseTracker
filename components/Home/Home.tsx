@@ -13,19 +13,24 @@ import { Expense } from "../../util/types";
 import { CustomModal } from "../Custom/CustomModal";
 import { findCategory } from "../../util/findCategory";
 import { fetchGet, fetchPost } from "../../http/http";
-import { addExpenseUrl, getCategoriesUrl } from "../../http/url";
+import {
+  getExpensesUrl,
+  addExpenseUrl,
+  getCategoriesUrl,
+  getCurrentUserUrl,
+} from "../../http/url";
 import { mainColor } from "../../util/colors";
-import { Error } from "./Error";
+import { ErrorComponent } from "./ErrorComponent";
 import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
 import { updateCategories } from "../../slice/categoriesSlice";
 import { modalAction } from "../../slice/modalSlice";
 import { CustomPressable } from "../Custom/CustomPressable";
 import { Navigation } from "./Navigation";
 import { updateData } from "../../slice/updateSlice";
-import { getExpensesUrl } from "../../http/url";
 import { updateExpenses } from "../../slice/expensesSlice";
 import { getDate } from "../../util/getDate";
 import { validateAddExpenseInput } from "../../util/validateAddExpenseInput";
+import { setUser } from "../../slice/userSlice";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
@@ -43,30 +48,44 @@ export const Home = () => {
   async function getCategories() {
     setLoading(true);
     try {
-      const { categories } = await fetchGet(getCategoriesUrl);
-      if (!categories) {
-        setError("Error fetching data from server.");
+      const response = await fetchGet(getCategoriesUrl);
+      if (!response.ok) {
         setLoading(false);
-        return;
+        throw new Error();
       }
+      const { categories } = await response.json();
       dispatch(updateCategories(categories));
       setLoading(false);
     } catch (error) {
       setError("Error fetching categories");
-      console.error(error);
     }
   }
 
   async function getExpenses() {
     try {
-      const { expenses } = await fetchGet(getExpensesUrl, expenseFilters);
-      if (!expenses) {
-        return;
+      const response = await fetchGet(getExpensesUrl, expenseFilters);
+      if (!response.ok) {
+        throw new Error();
       }
+      const { expenses } = await response.json();
       dispatch(updateExpenses(expenses));
     } catch (error) {
       setError("Error fetching expenses");
-      console.error(error);
+    }
+  }
+
+  async function getCurrentUser() {
+    try {
+      const response = await fetchGet(getCurrentUserUrl);
+      if (!response.ok) {
+        throw new Error();
+      }
+      const { userId, username } = await response.json();
+      if (userId && username) {
+        dispatch(setUser({ userId: userId, username: username }));
+      }
+    } catch (error) {
+      setError("Something went wrong getting current user");
     }
   }
 
@@ -74,6 +93,7 @@ export const Home = () => {
     if (update) {
       getCategories();
       getExpenses();
+      getCurrentUser();
       dispatch(updateData(false));
     }
   }, [update]);
@@ -90,6 +110,8 @@ export const Home = () => {
       categoryName: "",
       categoryId: 0,
     },
+    userId: currentUser.userId,
+    username: currentUser.username,
     date: getDate(),
   });
   const [feedback, setFeedback] = useState<string>("");
@@ -98,6 +120,11 @@ export const Home = () => {
     const errorMessage = validateAddExpenseInput(textInput, selectedCategoryId);
     if (errorMessage.length > 0) {
       setFeedback(errorMessage);
+      return;
+    }
+
+    if (!currentUser.userId) {
+      setFeedback("No user logged in");
       return;
     }
 
@@ -118,6 +145,8 @@ export const Home = () => {
         expenseId: 0,
         expenseAmount: parsedExpense,
         expenseType: category,
+        userId: currentUser.userId,
+        username: currentUser.username,
         date: getDate(),
       };
     });
@@ -137,6 +166,8 @@ export const Home = () => {
           categoryName: "",
           categoryId: 0,
         },
+        userId: 0,
+        username: "",
         date: getDate(),
       };
     });
@@ -176,7 +207,9 @@ export const Home = () => {
             onPressAddExpense={onPressAddExpense}
           />
         )}
-        {error && <Error error={error} onPressTryAgain={onPressTryAgain} />}
+        {error && (
+          <ErrorComponent error={error} onPressTryAgain={onPressTryAgain} />
+        )}
         <Navigation />
       </View>
     </TouchableWithoutFeedback>

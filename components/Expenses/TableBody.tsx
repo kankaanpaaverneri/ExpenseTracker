@@ -1,6 +1,7 @@
 import { View, Text, FlatList, Pressable, StyleSheet } from "react-native";
 import { Expense } from "../../util/types";
 import { mainColor } from "../../util/colors";
+import { useAppSelector } from "../../hooks/hooks";
 
 interface TableBodyProps {
   expenses: Expense[];
@@ -8,6 +9,7 @@ interface TableBodyProps {
 }
 
 export const TableBody = ({ expenses, deleteExpense }: TableBodyProps) => {
+  const currentUserId = useAppSelector((state) => state.userReducer.userId);
   return (
     <FlatList
       style={styles.tableBody}
@@ -33,17 +35,19 @@ export const TableBody = ({ expenses, deleteExpense }: TableBodyProps) => {
               <Text style={styles.bodyText}>{formatedTime}</Text>
             </View>
             <View style={styles.tableRow}>
-              <Text>Verneri</Text>
+              <Text>{item.username}</Text>
             </View>
-            <View style={styles.tableRow}>
-              <Pressable
-                onPress={() => {
-                  deleteExpense(item.expenseId);
-                }}
-              >
-                <Text style={styles.deleteButton}>🗑️</Text>
-              </Pressable>
-            </View>
+            {item.userId === currentUserId && (
+              <View style={styles.tableRow}>
+                <Pressable
+                  onPress={() => {
+                    deleteExpense(item.expenseId);
+                  }}
+                >
+                  <Text style={styles.deleteButton}>🗑️</Text>
+                </Pressable>
+              </View>
+            )}
           </View>
         );
       }}

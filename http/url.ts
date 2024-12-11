@@ -9,3 +9,4 @@ export const getExpensesUrl = `${rootUrl}/get-expenses`;
 export const removeExpenseUrl = `${rootUrl}/remove-expense/`;
 export const addNewUserUrl = `${rootUrl}/add-new-user`;
 export const loginUrl = `${rootUrl}/login`;
+export const getCurrentUserUrl = `${rootUrl}/get-current-user`;
