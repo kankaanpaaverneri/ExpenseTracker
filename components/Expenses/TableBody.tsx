@@ -1,7 +1,7 @@
 import { View, Text, FlatList, Pressable, StyleSheet } from "react-native";
 import { Expense } from "../../util/types";
-import { mainColor } from "../../util/colors";
 import { useAppSelector } from "../../hooks/hooks";
+import { TotalAmountsRow } from "./TotalAmountsRow";
 
 interface TableBodyProps {
   expenses: Expense[];
@@ -11,65 +11,65 @@ interface TableBodyProps {
 export const TableBody = ({ expenses, deleteExpense }: TableBodyProps) => {
   const currentUserId = useAppSelector((state) => state.userReducer.userId);
   return (
-    <FlatList
-      style={styles.tableBody}
-      data={expenses}
-      renderItem={({ item }) => {
-        const date = item.date;
-        const formatedDate = `${date.day}.${date.month}.${date.year}`;
-        const formatedTime = `${date.hours}:${date.minutes}:${date.seconds}`;
-        return (
-          <View style={styles.tableColumn}>
-            <View style={styles.tableRow}>
-              <Text style={styles.bodyText}>
-                {item.expenseAmount.toFixed(2)}€
-              </Text>
-            </View>
-            <View style={styles.tableRow}>
-              <Text style={styles.bodyText}>
-                {item.expenseType.categoryName}
-              </Text>
-            </View>
-            <View style={styles.tableRow}>
-              <Text style={styles.bodyText}>{formatedDate}</Text>
-              <Text style={styles.bodyText}>{formatedTime}</Text>
-            </View>
-            <View style={styles.tableRow}>
-              <Text>{item.username}</Text>
-            </View>
-            {item.userId === currentUserId && (
+    <View style={styles.tableBody}>
+      <FlatList
+        showsVerticalScrollIndicator={true}
+        data={expenses}
+        renderItem={({ item }) => {
+          const date = item.date;
+          const formatedDate = `${date.day}.${date.month}.${date.year}`;
+          const formatedTime = `${date.hours}:${date.minutes}:${date.seconds}`;
+          return (
+            <View style={styles.tableColumn}>
               <View style={styles.tableRow}>
-                <Pressable
-                  onPress={() => {
-                    deleteExpense(item.expenseId);
-                  }}
-                >
-                  <Text style={styles.deleteButton}>🗑️</Text>
-                </Pressable>
+                <Text style={styles.bodyText}>
+                  {item.expenseAmount.toFixed(2)}€
+                </Text>
               </View>
-            )}
-          </View>
-        );
-      }}
-    />
+              <View style={styles.tableRow}>
+                <Text style={styles.bodyText}>
+                  {item.expenseType.categoryName}
+                </Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.bodyText}>{formatedDate}</Text>
+                <Text style={styles.bodyText}>{formatedTime}</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.bodyText}>{item.username}</Text>
+              </View>
+              {item.userId === currentUserId && (
+                <View style={styles.tableRow}>
+                  <Pressable
+                    onPress={() => {
+                      deleteExpense(item.expenseId);
+                    }}
+                  >
+                    <Text style={styles.bodyText}>🗑️</Text>
+                  </Pressable>
+                </View>
+              )}
+            </View>
+          );
+        }}
+      />
+      <TotalAmountsRow expenses={expenses} />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   tableBody: {
-    maxHeight: 300,
-    margin: 1,
+    maxHeight: 270,
     backgroundColor: "lightgray",
   },
   bodyText: {
     textAlign: "center",
-    fontSize: 12,
+    fontSize: 10,
   },
   deleteButton: {
-    backgroundColor: "white",
     color: "black",
-    borderWidth: 1,
-    padding: 10,
+    padding: 5,
     borderRadius: 5,
   },
   tableColumn: {

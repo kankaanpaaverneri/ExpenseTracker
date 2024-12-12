@@ -51,14 +51,10 @@ export const FilterByDate = ({
 
 const styles = StyleSheet.create({
   filterByDateContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    width: 300,
     height: 100,
+    width: 200,
   },
   dateInputContainer: {
-    flexDirection: "column",
     margin: 1,
   },
   dateInputLabel: {
@@ -66,6 +62,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   dateInput: {
+    textAlign: "center",
     fontSize: 15,
   },
 });

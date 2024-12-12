@@ -1,4 +1,4 @@
-import { FlatList, Text, StyleSheet, Pressable } from "react-native";
+import { FlatList, Text, StyleSheet, Pressable, View } from "react-native";
 import { mainColor } from "../../util/colors";
 import { CategoryFilters } from "../../util/types";
 
@@ -18,22 +18,23 @@ export const FilterByCategory = ({
       keyExtractor={(item) => item.categoryId.toString()}
       renderItem={({ item }) => {
         return (
-          <Pressable
-            onPress={() => {
-              onPressCategory(item.categoryId);
-            }}
-            style={styles.listItem}
-          >
-            <Text
-              style={
-                item.selected
-                  ? styles.listItemTextSelected
-                  : styles.listItemText
-              }
+          <View style={styles.listItem}>
+            <Pressable
+              onPress={() => {
+                onPressCategory(item.categoryId);
+              }}
             >
-              {item.categoryName}
-            </Text>
-          </Pressable>
+              <Text
+                style={
+                  item.selected
+                    ? styles.listItemTextSelected
+                    : styles.listItemText
+                }
+              >
+                {item.categoryName}
+              </Text>
+            </Pressable>
+          </View>
         );
       }}
     />
@@ -42,14 +43,10 @@ export const FilterByCategory = ({
 
 const styles = StyleSheet.create({
   listContainer: {
-    flexDirection: "column",
     height: 100,
-    width: 300,
-    padding: 1,
+    width: 200,
   },
-  listItem: {
-    margin: 1,
-  },
+  listItem: {},
 
   listItemText: {
     fontSize: 15,

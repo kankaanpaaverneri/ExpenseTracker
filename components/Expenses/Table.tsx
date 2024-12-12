@@ -7,6 +7,7 @@ import { useAppDispatch } from "../../hooks/hooks";
 import { updateData } from "../../slice/updateSlice";
 import { TableHead } from "./TableHead";
 import { TableBody } from "./TableBody";
+import { TotalAmountsRow } from "./TotalAmountsRow";
 interface TableProps {
   expenses: Expense[];
 }

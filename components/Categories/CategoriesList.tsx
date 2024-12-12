@@ -54,10 +54,7 @@ const styles = StyleSheet.create({
   },
 
   categoryItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    minWidth: 200,
+    width: 200,
     margin: 5,
     backgroundColor: mainColor,
     borderRadius: 15,
@@ -77,6 +74,7 @@ const styles = StyleSheet.create({
   },
 
   categoryText: {
+    textAlign: "center",
     color: "white",
   },
   deleteButtonText: {

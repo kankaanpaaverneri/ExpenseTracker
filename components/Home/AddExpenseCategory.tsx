@@ -39,15 +39,19 @@ export const AddExpenseCategory = ({
 const styles = StyleSheet.create({
   unselectedPressable: {
     padding: 10,
+    textAlign: "center",
   },
 
   selectedPressable: {
     padding: 10,
     backgroundColor: mainColor,
     color: "white",
+    textAlign: "center",
   },
   list: {
     flexDirection: "column",
     height: 200,
+    borderWidth: 1,
+    borderRadius: 5,
   },
 });

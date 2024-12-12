@@ -30,6 +30,7 @@ const AddExpense = ({ onPressAddExpense, feedback }: AddExpenseProps) => {
         <Pressable
           onPress={() => {
             onPressAddExpense(textInput, selectedCategory);
+            setTextInput("");
             onSelectCategory(0);
           }}
           style={styles.pressable}

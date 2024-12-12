@@ -28,11 +28,12 @@ import { modalAction } from "../../slice/modalSlice";
 import { CustomPressable } from "../Custom/CustomPressable";
 import { Navigation } from "./Navigation";
 import { updateData } from "../../slice/updateSlice";
-import { updateExpenses } from "../../slice/expensesSlice";
+import { updateExpenses, updateTotal } from "../../slice/expensesSlice";
 import { getDate } from "../../util/getDate";
 import { validateAddExpenseInput } from "../../util/validateAddExpenseInput";
 import { setUser } from "../../slice/userSlice";
 import { updateUsers } from "../../slice/usersSlice";
+import { parseExpenses } from "../../util/parseExpenses";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
@@ -70,6 +71,11 @@ export const Home = () => {
         throw new Error();
       }
       const { expenses } = await response.json();
+      const parsedExpenses = parseExpenses(expenses);
+      const totalExpenses = parsedExpenses.reduce((acc, cur) => {
+        return acc + cur.expenseAmount;
+      }, 0);
+      dispatch(updateTotal(totalExpenses));
       dispatch(updateExpenses(expenses));
     } catch (error) {
       setError("Error fetching expenses");
@@ -87,7 +93,7 @@ export const Home = () => {
         dispatch(setUser({ userId: userId, username: username }));
       }
     } catch (error) {
-      setError("Something went wrong getting current user");
+      setError("Error getting current user");
     }
   }
 
@@ -171,7 +177,14 @@ export const Home = () => {
 
   async function closeModal() {
     // Send expense to backend
-    await fetchPost(addExpenseUrl, expense);
+    try {
+      const response = await fetchPost(addExpenseUrl, expense);
+      if (!response.ok) {
+        throw new Error();
+      }
+    } catch (error) {
+      setError("Error sending expense to backend.");
+    }
 
     // Clear expense
     setExpense(() => {

@@ -1,11 +1,4 @@
-import {
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { errorColor, mainColor } from "../../util/colors";
 import { fetchDelete, fetchPost } from "../../http/http";
 import { addNewCategoryUrl, removeCategoryUrl } from "../../http/url";
@@ -142,8 +135,7 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     fontSize: 20,
-    backgroundColor: errorColor,
-    color: "white",
+    color: "black",
     justifyContent: "center",
     alignItems: "center",
     paddingLeft: 20,
@@ -152,5 +144,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderRadius: 10,
     margin: 10,
+    borderWidth: 1,
   },
 });

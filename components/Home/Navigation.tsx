@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { ProfileScreenNavigationProp } from "../../App";
 import { useAppDispatch } from "../../hooks/hooks";
 import { updateData } from "../../slice/updateSlice";
+import { mainColor } from "../../util/colors";
 
 export const Navigation = () => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
@@ -13,7 +14,7 @@ export const Navigation = () => {
         style={styles.navigationItem}
         onPress={() => navigation.navigate("Categories")}
       >
-        <Text>Add category</Text>
+        <Text style={styles.navigationText}>Categories</Text>
       </Pressable>
       <Pressable
         style={styles.navigationItem}
@@ -21,13 +22,13 @@ export const Navigation = () => {
           navigation.navigate("Expenses");
         }}
       >
-        <Text>Expenses</Text>
+        <Text style={styles.navigationText}>Expenses</Text>
       </Pressable>
       <Pressable
         style={styles.navigationItem}
         onPress={() => navigation.navigate("Account")}
       >
-        <Text>Account</Text>
+        <Text style={styles.navigationText}>Account</Text>
       </Pressable>
     </View>
   );
@@ -35,10 +36,17 @@ export const Navigation = () => {
 
 const styles = StyleSheet.create({
   navigationContainer: {
-    verticalAlign: "bottom",
     flexDirection: "row",
   },
   navigationItem: {
-    margin: 20,
+    width: 100,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  navigationText: {
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    textAlign: "center",
   },
 });

@@ -1,23 +1,29 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, FlatList, ScrollView } from "react-native";
 import { useAppSelector } from "../../hooks/hooks";
 import { Table } from "./Table";
 import { FilterExpenses } from "./FilterExpenses";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export const Expenses = () => {
   const expenses = useAppSelector((state) => state.expensesReducer.expenses);
+  const data = [0];
   return (
-    <View style={styles.expensesContainer}>
-      <Text style={styles.title}>Expenses</Text>
-      <View>
-        <FilterExpenses />
-      </View>
-      {expenses.length === 0 && (
-        <View>
-          <Text style={styles.text}>No expenses available</Text>
+    <SafeAreaProvider>
+      <SafeAreaView>
+        <View style={styles.expensesContainer}>
+          <Text style={styles.title}>Expenses</Text>
+          <View>
+            <FilterExpenses />
+          </View>
+          {expenses.length === 0 && (
+            <View>
+              <Text style={styles.text}>No expenses available</Text>
+            </View>
+          )}
+          {expenses.length > 0 && <Table expenses={expenses} />}
         </View>
-      )}
-      {expenses.length > 0 && <Table expenses={expenses} />}
-    </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 
@@ -25,7 +31,6 @@ const styles = StyleSheet.create({
   expensesContainer: {
     justifyContent: "center",
     alignItems: "center",
-    margin: 1,
   },
   title: {
     fontSize: 25,

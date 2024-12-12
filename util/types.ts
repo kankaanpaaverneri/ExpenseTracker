@@ -53,14 +53,14 @@ export interface LoginData {
   password: string;
 }
 
-export enum NavigationItemId {
+export enum FilterNavigationItemId {
   None,
   Category,
   Date,
   User,
 }
 
-export interface NavigationItem {
-  id: NavigationItemId;
+export interface FilterNavigationItem {
+  id: FilterNavigationItemId;
   name: string;
 }

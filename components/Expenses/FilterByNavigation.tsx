@@ -1,16 +1,16 @@
 import { Pressable, View, Text, StyleSheet } from "react-native";
-import { NavigationItem, NavigationItemId } from "../../util/types";
+import { FilterNavigationItem, FilterNavigationItemId } from "../../util/types";
 import { mainColor } from "../../util/colors";
 
-const filterItems: NavigationItem[] = [
-  { id: NavigationItemId.Category, name: "Category" },
-  { id: NavigationItemId.Date, name: "Date" },
-  { id: NavigationItemId.User, name: "User" },
+const filterItems: FilterNavigationItem[] = [
+  { id: FilterNavigationItemId.Category, name: "Category" },
+  { id: FilterNavigationItemId.Date, name: "Date" },
+  { id: FilterNavigationItemId.User, name: "User" },
 ];
 
 interface FilterByNavigationProps {
-  currentNavigationSelected: NavigationItemId;
-  onPressNavigationItem: (id: NavigationItemId) => void;
+  currentNavigationSelected: FilterNavigationItemId;
+  onPressNavigationItem: (id: FilterNavigationItemId) => void;
 }
 
 export function FilterByNavigation({

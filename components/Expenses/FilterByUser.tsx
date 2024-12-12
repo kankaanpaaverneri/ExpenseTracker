@@ -36,13 +36,11 @@ export function FilterByUser({
 
 const styles = StyleSheet.create({
   usersContainer: {
-    flexDirection: "column",
-    padding: 1,
-    width: 300,
     height: 100,
+    width: 200,
   },
   userItem: {
-    padding: 1,
+    margin: 1,
   },
   userText: {
     textAlign: "center",

@@ -1,4 +1,13 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import {
+  Animated,
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  TouchableWithoutFeedback,
+  Keyboard,
+  useAnimatedValue,
+} from "react-native";
 import { FilterByDate } from "./FilterByDate";
 import { FilterByCategory } from "./FilterByCategory";
 import { mainColor } from "../../util/colors";
@@ -9,7 +18,7 @@ import { DateFilters, CategoryFilters, DateFilterType } from "../../util/types";
 import { updateData } from "../../slice/updateSlice";
 import { updateExpenseFilters } from "../../slice/expensesSlice";
 import { FilterByNavigation } from "./FilterByNavigation";
-import { NavigationItemId } from "../../util/types";
+import { FilterNavigationItemId } from "../../util/types";
 import { FilterByUser } from "./FilterByUser";
 import { UserFilters } from "../../util/types";
 
@@ -133,7 +142,13 @@ export const FilterExpenses = () => {
         };
       });
     });
-    setDateFilters(() => {
+    setDateFilters((prev) => {
+      const updated = { ...prev };
+      updated.from = "";
+      updated.to = "";
+      return updated;
+    });
+    setErrorInDates(() => {
       return {
         from: "",
         to: "",
@@ -142,7 +157,10 @@ export const FilterExpenses = () => {
     dispatch(
       updateExpenseFilters({
         categoryFilters: categoryFilters,
-        dateFilters: dateFilters,
+        dateFilters: {
+          from: "",
+          to: "",
+        },
         userFilters: userFilters,
       }),
     );
@@ -183,14 +201,14 @@ export const FilterExpenses = () => {
   }, []);
 
   const [currentNavigationItem, setCurrentNavigationItem] = useState<number>(
-    NavigationItemId.None,
+    FilterNavigationItemId.None,
   );
 
-  function onPressNavigationItem(id: NavigationItemId): void {
+  function onPressNavigationItem(id: FilterNavigationItemId): void {
     if (id !== currentNavigationItem) {
       setCurrentNavigationItem(id);
     } else {
-      setCurrentNavigationItem(NavigationItemId.None);
+      setCurrentNavigationItem(FilterNavigationItemId.None);
     }
   }
 
@@ -210,51 +228,53 @@ export const FilterExpenses = () => {
   }
 
   return (
-    <View style={styles.filterExpensesContainer}>
-      <Text style={styles.filterBy}>Filter by</Text>
-      <FilterByNavigation
-        currentNavigationSelected={currentNavigationItem}
-        onPressNavigationItem={onPressNavigationItem}
-      />
-      <View style={styles.filterByContainer}>
-        {currentNavigationItem === NavigationItemId.Category && (
-          <View style={styles.filterByData}>
-            <Text style={styles.title}>Category</Text>
-            <FilterByCategory
-              categoryFilters={categoryFilters}
-              onPressCategory={onPressCategory}
-            />
-          </View>
-        )}
-        {currentNavigationItem === NavigationItemId.Date && (
-          <View style={styles.filterByData}>
-            <Text style={styles.title}>Date</Text>
-            <FilterByDate
-              dateFilters={dateFilters}
-              onChangeDateFilters={onChangeDateFilters}
-              errorInDates={errorInDates}
-            />
-          </View>
-        )}
-        {currentNavigationItem === NavigationItemId.User && (
-          <View style={styles.filterByData}>
-            <Text style={styles.title}>User</Text>
-            <FilterByUser
-              userFilters={userFilters}
-              onPressUserFilter={onPressUserFilter}
-            />
-          </View>
-        )}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.filterExpensesContainer}>
+        <Text style={styles.filterBy}>Filter by</Text>
+        <FilterByNavigation
+          currentNavigationSelected={currentNavigationItem}
+          onPressNavigationItem={onPressNavigationItem}
+        />
+        <View style={styles.filterByContainer}>
+          {currentNavigationItem === FilterNavigationItemId.Category && (
+            <View style={styles.filterByData}>
+              <Text style={styles.title}>Category</Text>
+              <FilterByCategory
+                categoryFilters={categoryFilters}
+                onPressCategory={onPressCategory}
+              />
+            </View>
+          )}
+          {currentNavigationItem === FilterNavigationItemId.Date && (
+            <View style={styles.filterByData}>
+              <Text style={styles.title}>Date</Text>
+              <FilterByDate
+                dateFilters={dateFilters}
+                onChangeDateFilters={onChangeDateFilters}
+                errorInDates={errorInDates}
+              />
+            </View>
+          )}
+          {currentNavigationItem === FilterNavigationItemId.User && (
+            <View style={styles.filterByData}>
+              <Text style={styles.title}>User</Text>
+              <FilterByUser
+                userFilters={userFilters}
+                onPressUserFilter={onPressUserFilter}
+              />
+            </View>
+          )}
+        </View>
+        <View style={styles.filterPressableContainer}>
+          <Pressable onPress={onPressFilter}>
+            <Text style={styles.filterPressableText}>Filter</Text>
+          </Pressable>
+          <Pressable onPress={onPressClearFilters}>
+            <Text style={styles.clearFilterText}>Clear filters</Text>
+          </Pressable>
+        </View>
       </View>
-      <View style={styles.filterPressableContainer}>
-        <Pressable onPress={onPressFilter}>
-          <Text style={styles.filterPressableText}>Filter</Text>
-        </Pressable>
-        <Pressable onPress={onPressClearFilters}>
-          <Text style={styles.clearFilterText}>Clear filters</Text>
-        </Pressable>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -263,7 +283,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    margin: 10,
+    margin: 1,
   },
   filterBy: {
     fontWeight: "bold",

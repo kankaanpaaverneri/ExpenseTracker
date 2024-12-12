@@ -28,11 +28,11 @@ export const TableHead = () => {
 const styles = StyleSheet.create({
   tableHead: {
     flexDirection: "column",
-    margin: 1,
     backgroundColor: mainColor,
   },
   headText: {
     fontSize: 12,
+    fontWeight: "bold",
     textAlign: "center",
     flexWrap: "nowrap",
     color: "white",
