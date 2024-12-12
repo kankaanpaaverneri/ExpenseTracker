@@ -1,12 +1,8 @@
 import { Text, View, StyleSheet } from "react-native";
 import { useAppSelector } from "../../hooks/hooks";
-import { Expense } from "../../util/types";
+import { mainColor } from "../../util/colors";
 
-interface TotalAmountRowProps {
-  expenses: Expense[];
-}
-
-export const TotalAmountsRow = ({ expenses }: TotalAmountRowProps) => {
+export const TotalAmountsRow = () => {
   const totalExpenses = useAppSelector(
     (state) => state.expensesReducer.totalExpenses,
   );
@@ -26,15 +22,17 @@ const styles = StyleSheet.create({
   bodyText: {
     textAlign: "center",
     fontSize: 10,
+    color: "white",
   },
   tableColumn: {
-    backgroundColor: "lightgray",
+    backgroundColor: mainColor,
     flexDirection: "row",
-    margin: 10,
+    padding: 10,
+    justifyContent: "center",
   },
   tableRow: {
     alignItems: "center",
     justifyContent: "center",
-    width: 70,
+    margin: 10,
   },
 });

@@ -6,7 +6,6 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export const Expenses = () => {
   const expenses = useAppSelector((state) => state.expensesReducer.expenses);
-  const data = [0];
   return (
     <SafeAreaProvider>
       <SafeAreaView>

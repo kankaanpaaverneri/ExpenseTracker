@@ -120,6 +120,7 @@ export const FilterExpenses = () => {
         userFilters: filteredUserFilters,
       }),
     );
+    setCurrentNavigationItem(FilterNavigationItemId.None);
     dispatch(updateData(true));
   }
 
@@ -164,6 +165,7 @@ export const FilterExpenses = () => {
         userFilters: userFilters,
       }),
     );
+    setCurrentNavigationItem(FilterNavigationItemId.None);
     dispatch(updateData(true));
   }
 
