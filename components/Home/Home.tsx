@@ -216,13 +216,14 @@ export const Home = () => {
             <Text style={styles.okButton}>Ok</Text>
           </CustomPressable>
         </CustomModal>
+
+        <Text style={styles.title}>Expense Tracker</Text>
         <View style={styles.userContainer}>
           <Text style={styles.userText}>
             Current user{" "}
             <Text style={{ fontWeight: "bold" }}>{currentUser.username}</Text>
           </Text>
         </View>
-        <Text style={styles.title}>Expense Tracker</Text>
         {loading && (
           <ActivityIndicator
             style={styles.activityIndicator}
@@ -275,12 +276,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 
-  userContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 20,
-  },
+  userContainer: {},
   userText: {
     fontSize: 15,
   },

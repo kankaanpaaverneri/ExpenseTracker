@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   list: {
     flexDirection: "column",
     height: 200,
-    borderWidth: 1,
     borderRadius: 5,
+    backgroundColor: "lightgray",
   },
 });

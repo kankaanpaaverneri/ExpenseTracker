@@ -53,7 +53,7 @@ export const TableBody = ({ expenses, deleteExpense }: TableBodyProps) => {
           );
         }}
       />
-      <TotalAmountsRow expenses={expenses} />
+      <TotalAmountsRow />
     </View>
   );
 };
