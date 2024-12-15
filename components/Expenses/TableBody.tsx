@@ -1,4 +1,11 @@
-import { View, Text, FlatList, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import { Expense } from "../../util/types";
 import { useAppSelector } from "../../hooks/hooks";
 import { TotalAmountsRow } from "./TotalAmountsRow";
@@ -58,9 +65,11 @@ export const TableBody = ({ expenses, deleteExpense }: TableBodyProps) => {
   );
 };
 
+const deviceDimension = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   tableBody: {
-    maxHeight: 270,
+    maxHeight: deviceDimension.height > 800 ? 330 : 120,
     backgroundColor: "lightgray",
   },
   bodyText: {

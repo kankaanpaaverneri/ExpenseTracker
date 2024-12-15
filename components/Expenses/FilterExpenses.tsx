@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   useAnimatedValue,
+  Dimensions,
 } from "react-native";
 import { FilterByDate } from "./FilterByDate";
 import { FilterByCategory } from "./FilterByCategory";
@@ -21,6 +22,7 @@ import { FilterByNavigation } from "./FilterByNavigation";
 import { FilterNavigationItemId } from "../../util/types";
 import { FilterByUser } from "./FilterByUser";
 import { UserFilters } from "../../util/types";
+import { current } from "@reduxjs/toolkit";
 
 export const FilterExpenses = () => {
   const categories = useAppSelector(
@@ -203,7 +205,7 @@ export const FilterExpenses = () => {
   }, []);
 
   const [currentNavigationItem, setCurrentNavigationItem] = useState<number>(
-    FilterNavigationItemId.None,
+    FilterNavigationItemId.Category,
   );
 
   function onPressNavigationItem(id: FilterNavigationItemId): void {
@@ -228,6 +230,50 @@ export const FilterExpenses = () => {
       });
     });
   }
+  const styles = StyleSheet.create({
+    filterExpensesContainer: {
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom:
+        currentNavigationItem === FilterNavigationItemId.None ? 161 : 1,
+    },
+    filterBy: {
+      fontWeight: "bold",
+      textAlign: "center",
+    },
+    title: {
+      fontSize: 15,
+      textAlign: "center",
+      margin: 10,
+      fontWeight: "bold",
+    },
+    filterByContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    filterByData: {
+      margin: 10,
+    },
+    filterPressableContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    filterPressableText: {
+      backgroundColor: mainColor,
+      color: "white",
+      padding: 10,
+      margin: 10,
+      borderRadius: 5,
+    },
+    clearFilterText: {
+      padding: 10,
+      margin: 10,
+      borderRadius: 5,
+      borderWidth: 1,
+    },
+  });
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -279,47 +325,3 @@ export const FilterExpenses = () => {
     </TouchableWithoutFeedback>
   );
 };
-
-const styles = StyleSheet.create({
-  filterExpensesContainer: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 1,
-  },
-  filterBy: {
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  title: {
-    fontSize: 15,
-    textAlign: "center",
-    margin: 10,
-    fontWeight: "bold",
-  },
-  filterByContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  filterByData: {
-    margin: 10,
-  },
-  filterPressableContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  filterPressableText: {
-    backgroundColor: mainColor,
-    color: "white",
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-  },
-  clearFilterText: {
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-    borderWidth: 1,
-  },
-});

@@ -48,18 +48,21 @@ const styles = StyleSheet.create({
   navigationItem: {
     justifyContent: "center",
     alignItems: "center",
-    width: 100,
+    maxWidth: 100,
+    minWidth: 50,
     margin: 5,
   },
   text: {
-    width: 100,
+    maxWidth: 100,
+    minWidth: 80,
     textAlign: "center",
     fontSize: 15,
     padding: 10,
   },
 
   textSelected: {
-    width: 100,
+    maxWidth: 100,
+    minWidth: 80,
     textAlign: "center",
     fontSize: 15,
     backgroundColor: mainColor,

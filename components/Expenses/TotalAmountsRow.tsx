@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Dimensions } from "react-native";
 import { useAppSelector } from "../../hooks/hooks";
 import { mainColor } from "../../util/colors";
 
@@ -12,11 +12,13 @@ export const TotalAmountsRow = () => {
         <Text style={styles.bodyText}>Total</Text>
       </View>
       <View style={styles.tableRow}>
-        <Text style={styles.bodyText}>{totalExpenses} €</Text>
+        <Text style={styles.bodyText}>{totalExpenses.toFixed(2)} €</Text>
       </View>
     </View>
   );
 };
+
+const deviceDimension = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   bodyText: {
@@ -27,12 +29,12 @@ const styles = StyleSheet.create({
   tableColumn: {
     backgroundColor: mainColor,
     flexDirection: "row",
-    padding: 10,
+    padding: deviceDimension.height > 800 ? 10 : 1,
     justifyContent: "center",
   },
   tableRow: {
     alignItems: "center",
     justifyContent: "center",
-    margin: 10,
+    margin: deviceDimension.height > 800 ? 10 : 1,
   },
 });

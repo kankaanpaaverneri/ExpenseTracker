@@ -43,8 +43,8 @@ export const FilterByCategory = ({
 
 const styles = StyleSheet.create({
   listContainer: {
-    height: 100,
-    width: 200,
+    maxHeight: 100,
+    maxWidth: 200,
   },
   listItem: {},
 

@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    height: 200,
+    minHeight: 200,
+    maxHeight: 300,
   },
   expenseItem: {
     flexDirection: "row",
