@@ -38,4 +38,3 @@ yarn-error.*
 *.tsbuildinfo
 
 #other
-config.ts
