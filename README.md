@@ -1,6 +1,6 @@
 # ExpenseTracker
 ### Cross platform mobile app developed with React Native.
-User can add expenses and categories. Then filter expenses based on a date, category or a user.
+User can add expenses and categories. Then filter expenses based on a date, category or the user.
 
 * You can add Expenses
 * User can add categories for expenses
