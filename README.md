@@ -5,7 +5,7 @@ User can add expenses and categories. Then filter expenses based on a date, cate
 * You can add Expenses
 * User can add categories for expenses
 * You can create different user accounts
-* User can filter expenses based on category
+* User can filter expenses based on category, date or the user
 <div style="display: flex; flex-direction: column;">
   <img src= "/assets/expensetracker_add_new_expense.png" width="200px"/>
   <img src= "/assets/expensetracker_add_new_category.png" width="200px"/>
